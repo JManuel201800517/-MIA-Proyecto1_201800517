@@ -5,21 +5,108 @@
 #include <string>
 #include <sstream>
 
+struct Particion
+{
+    char *part_status;
+    char *part_type;
+    char *part_fit;
+    int part_start;
+    int part_size;
+    char part_name[16];
+};
+
+struct EBR
+{
+    char *part_status;
+    char *part_fit;
+    int part_start;
+    int part_size;
+    int part_next;
+    char part_name[16];
+};
+
 struct MBR
 {
     int mbr_tamano;
     time_t mbr_fecha_creacion;
     int mbr_dsk_signature;
     char *mbr_fit;
+    Particion mbr_partcion[4];
 };
 
-void FDISK(char *x, char *y, char *z, char *v)
+void RMDISK(char *x)
 {
-    printf("%s %s %s %s %s\n", "Esta prueba es de mkdisk split:", x, y, z, v);
+
+    printf("%s %s\n", "Esta prueba es de split:", x);
     char igual[] = "=";
 
+    char espacio[] = " ";
+
+    int cont = 0;
+
     char *split = strtok(x, igual);
-    printf(" %s\n", split);
+
+    if (strcmp(split, "-path") == 0)
+    {
+        printf("Buscando direccion entre archivos... \n");
+        printf("Analizando..... \n");
+        while (split != NULL)
+        {
+            if (strcmp(split, "-path") == 0)
+            {
+                printf("Analizando..... \n");
+                split = strtok(NULL, " ");
+            }
+            else
+            {
+                printf(" %s\n", split); // printing each token
+
+                printf(" \n");
+                printf("Abriendo script \n");
+
+                printf(" %s\n", split);
+
+                char t = *split;
+
+                split[strcspn(split, "\n")] = 0;
+
+                if (strcmp(split, "/home/manuel/Descargas/hola.txt") == 0)
+                {
+                    printf("Deberia funcionar \n");
+                }
+                else
+                {
+                    printf("No es igual \n");
+                }
+
+                // printf(" %s\n", t);
+                FILE *archivo;
+                archivo = fopen(split, "w");
+                // fprintf(archivo,"Hola Mundo");
+                fclose(archivo);
+
+                if (remove(split) == 0) // Eliminamos el archivo
+                    printf("El archivo fue eliminado satisfactoriamente\n");
+                else
+                    printf("No se pudo eliminar el archivo\n");
+
+                // system("PAUSE");
+                break;
+            }
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Utilice un comando existente y/o instruccion adecuada\n");
+        printf(" \n");
+    }
+}
+
+void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
+{
+    printf("%s %s %s %s %s %s %s %s\n", "Esta prueba es de fdisk split:", x, y, z, v, ty, fi, del);
+    char igual[] = "=";
 
     int s = 0;
 
@@ -29,14 +116,26 @@ void FDISK(char *x, char *y, char *z, char *v)
 
     int w = 0;
 
+    int ty1 = 0;
+
+    int fi1 = 0;
+
+    int del1 = 0;
+
     char *path[100];
     char *size[100];
     char *unit[100];
     char *name[100];
+    char *type[100];
+    char *fit[100];
+    char *delet[100];
 
     // unit[0] = "m";
 
-    printf("%s %d %d %d %d\n", "Prueba de parametros:", a, s, u, w);
+    //printf("%s %d %d %d %d\n", "Prueba de parametros:", a, s, u, w);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
 
     while (split != NULL)
     {
@@ -123,6 +222,72 @@ void FDISK(char *x, char *y, char *z, char *v)
                 {
                     printf(" %s\n", split);
                     name[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-type") == 0)
+        {
+            ty1 = ty1 + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    type[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-fit") == 0)
+        {
+            fi1 = fi1 + 1;
+            printf("Analizando comando, procesando instruccion fit... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-fit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    fit[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-delete") == 0)
+        {
+            del1 = del1 + 1;
+            printf("Analizando comando, procesando instruccion delete... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-delete") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    delet[0] = split;
                     break;
                 }
             }
@@ -230,6 +395,72 @@ void FDISK(char *x, char *y, char *z, char *v)
             }
             break;
         }
+        else if (strcmp(divi, "-type") == 0)
+        {
+            ty1 = ty1 + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    type[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-fit") == 0)
+        {
+            fi1 = fi1 + 1;
+            printf("Analizando comando, procesando instruccion fit... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-fit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    fit[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-delete") == 0)
+        {
+            del1 = del1 + 1;
+            printf("Analizando comando, procesando instruccion delete... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-delete") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    delet[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
         else
         {
             printf(" \n");
@@ -328,6 +559,72 @@ void FDISK(char *x, char *y, char *z, char *v)
                 {
                     printf(" %s\n", separar);
                     name[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-type") == 0)
+        {
+            ty1 = ty1 + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    type[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-fit") == 0)
+        {
+            fi1 = fi1 + 1;
+            printf("Analizando comando, procesando instruccion fit... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-fit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    fit[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-delete") == 0)
+        {
+            del1 = del1 + 1;
+            printf("Analizando comando, procesando instruccion delete... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-delete") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    delet[0] = separar;
                     break;
                 }
             }
@@ -437,6 +734,576 @@ void FDISK(char *x, char *y, char *z, char *v)
             }
             break;
         }
+        else if (strcmp(otra, "-type") == 0)
+        {
+            ty1 = ty1 + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s\n", otra);
+                }
+                else
+                {
+                    printf(" %s\n", otra);
+                    type[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(otra, "-fit") == 0)
+        {
+            fi1 = fi1 + 1;
+            printf("Analizando comando, procesando instruccion fit... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-fit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s\n", otra);
+                }
+                else
+                {
+                    printf(" %s\n", otra);
+                    fit[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(otra, "-delete") == 0)
+        {
+            del1 = del1 + 1;
+            printf("Analizando comando, procesando instruccion delete... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-delete") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s\n", otra);
+                }
+                else
+                {
+                    printf(" %s\n", otra);
+                    delet[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *mas = strtok(ty, igual);
+    printf(" %s\n", mas);
+
+    while (mas != NULL)
+    {
+        if (strcmp(mas, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (mas != NULL)
+            {
+                if (strcmp(mas, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    mas = strtok(NULL, " ");
+                    printf(" %s", mas);
+                }
+                else
+                {
+                    printf(" %s", mas);
+                    path[0] = mas;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(mas, "-size") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion size... \n");
+            printf("Analizando..... \n");
+            while (mas != NULL)
+            {
+                if (strcmp(mas, "-size") == 0)
+                {
+                    printf("Analizando..... \n");
+                    mas = strtok(NULL, " ");
+                    printf(" %s\n", mas);
+                }
+                else
+                {
+                    printf(" %s\n", mas);
+                    size[0] = mas;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(mas, "-unit") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion unit... \n");
+            printf("Analizando..... \n");
+            while (mas != NULL)
+            {
+                if (strcmp(mas, "-unit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    mas = strtok(NULL, " ");
+                    printf(" %s\n", mas);
+                }
+                else
+                {
+                    printf(" %s\n", mas);
+                    unit[0] = mas;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(mas, "-name") == 0)
+        {
+            w = w + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (mas != NULL)
+            {
+                if (strcmp(mas, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    mas = strtok(NULL, " ");
+                    printf(" %s", mas);
+                }
+                else
+                {
+                    printf(" %s", mas);
+                    name[0] = mas;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(mas, "-type") == 0)
+        {
+            ty1 = ty1 + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (mas != NULL)
+            {
+                if (strcmp(mas, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    mas = strtok(NULL, " ");
+                    printf(" %s\n", mas);
+                }
+                else
+                {
+                    printf(" %s\n", mas);
+                    type[0] = mas;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(mas, "-fit") == 0)
+        {
+            fi1 = fi1 + 1;
+            printf("Analizando comando, procesando instruccion fit... \n");
+            printf("Analizando..... \n");
+            while (mas != NULL)
+            {
+                if (strcmp(mas, "-fit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    mas = strtok(NULL, " ");
+                    printf(" %s\n", mas);
+                }
+                else
+                {
+                    printf(" %s\n", mas);
+                    fit[0] = mas;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(mas, "-delete") == 0)
+        {
+            del1 = del1 + 1;
+            printf("Analizando comando, procesando instruccion delete... \n");
+            printf("Analizando..... \n");
+            while (mas != NULL)
+            {
+                if (strcmp(mas, "-delete") == 0)
+                {
+                    printf("Analizando..... \n");
+                    mas = strtok(NULL, " ");
+                    printf(" %s\n", mas);
+                }
+                else
+                {
+                    printf(" %s\n", mas);
+                    delet[0] = mas;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *duo = strtok(fi, igual);
+    printf(" %s\n", duo);
+
+    while (duo != NULL)
+    {
+        if (strcmp(duo, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (duo != NULL)
+            {
+                if (strcmp(duo, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    duo = strtok(NULL, " ");
+                    printf(" %s", duo);
+                }
+                else
+                {
+                    printf(" %s", duo);
+                    path[0] = duo;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(duo, "-size") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion size... \n");
+            printf("Analizando..... \n");
+            while (duo != NULL)
+            {
+                if (strcmp(duo, "-size") == 0)
+                {
+                    printf("Analizando..... \n");
+                    duo = strtok(NULL, " ");
+                    printf(" %s\n", duo);
+                }
+                else
+                {
+                    printf(" %s\n", duo);
+                    size[0] = duo;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(duo, "-unit") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion unit... \n");
+            printf("Analizando..... \n");
+            while (duo != NULL)
+            {
+                if (strcmp(duo, "-unit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    duo = strtok(NULL, " ");
+                    printf(" %s\n", duo);
+                }
+                else
+                {
+                    printf(" %s\n", duo);
+                    unit[0] = duo;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(duo, "-name") == 0)
+        {
+            w = w + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (duo != NULL)
+            {
+                if (strcmp(duo, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    duo = strtok(NULL, " ");
+                    printf(" %s", duo);
+                }
+                else
+                {
+                    printf(" %s", duo);
+                    name[0] = duo;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(duo, "-type") == 0)
+        {
+            ty1 = ty1 + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (duo != NULL)
+            {
+                if (strcmp(duo, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    duo = strtok(NULL, " ");
+                    printf(" %s\n", duo);
+                }
+                else
+                {
+                    printf(" %s\n", duo);
+                    type[0] = duo;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(duo, "-fit") == 0)
+        {
+            fi1 = fi1 + 1;
+            printf("Analizando comando, procesando instruccion fit... \n");
+            printf("Analizando..... \n");
+            while (duo != NULL)
+            {
+                if (strcmp(duo, "-fit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    duo = strtok(NULL, " ");
+                    printf(" %s\n", duo);
+                }
+                else
+                {
+                    printf(" %s\n", duo);
+                    fit[0] = duo;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(duo, "-delete") == 0)
+        {
+            del1 = del1 + 1;
+            printf("Analizando comando, procesando instruccion delete... \n");
+            printf("Analizando..... \n");
+            while (duo != NULL)
+            {
+                if (strcmp(duo, "-delete") == 0)
+                {
+                    printf("Analizando..... \n");
+                    duo = strtok(NULL, " ");
+                    printf(" %s\n", duo);
+                }
+                else
+                {
+                    printf(" %s\n", duo);
+                    delet[0] = duo;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *elim = strtok(del, igual);
+    printf(" %s\n", elim);
+
+    while (elim != NULL)
+    {
+        if (strcmp(elim, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (elim != NULL)
+            {
+                if (strcmp(elim, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    elim = strtok(NULL, " ");
+                    printf(" %s", elim);
+                }
+                else
+                {
+                    printf(" %s", elim);
+                    path[0] = elim;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(elim, "-size") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion size... \n");
+            printf("Analizando..... \n");
+            while (elim != NULL)
+            {
+                if (strcmp(elim, "-size") == 0)
+                {
+                    printf("Analizando..... \n");
+                    elim = strtok(NULL, " ");
+                    printf(" %s\n", elim);
+                }
+                else
+                {
+                    printf(" %s\n", elim);
+                    size[0] = elim;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(elim, "-unit") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion unit... \n");
+            printf("Analizando..... \n");
+            while (elim != NULL)
+            {
+                if (strcmp(elim, "-unit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    elim = strtok(NULL, " ");
+                    printf(" %s\n", elim);
+                }
+                else
+                {
+                    printf(" %s\n", elim);
+                    unit[0] = elim;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(elim, "-name") == 0)
+        {
+            w = w + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (elim != NULL)
+            {
+                if (strcmp(elim, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    elim = strtok(NULL, " ");
+                    printf(" %s", elim);
+                }
+                else
+                {
+                    printf(" %s", elim);
+                    name[0] = elim;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(elim, "-type") == 0)
+        {
+            ty1 = ty1 + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (elim != NULL)
+            {
+                if (strcmp(elim, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    elim = strtok(NULL, " ");
+                    printf(" %s\n", elim);
+                }
+                else
+                {
+                    printf(" %s\n", elim);
+                    type[0] = elim;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(elim, "-fit") == 0)
+        {
+            fi1 = fi1 + 1;
+            printf("Analizando comando, procesando instruccion fit... \n");
+            printf("Analizando..... \n");
+            while (elim != NULL)
+            {
+                if (strcmp(elim, "-fit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    elim = strtok(NULL, " ");
+                    printf(" %s\n", elim);
+                }
+                else
+                {
+                    printf(" %s\n", elim);
+                    fit[0] = elim;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(elim, "-delete") == 0)
+        {
+            del1 = del1 + 1;
+            printf("Analizando comando, procesando instruccion delete... \n");
+            printf("Analizando..... \n");
+            while (elim != NULL)
+            {
+                if (strcmp(elim, "-delete") == 0)
+                {
+                    printf("Analizando..... \n");
+                    elim = strtok(NULL, " ");
+                    printf(" %s\n", elim);
+                }
+                else
+                {
+                    printf(" %s\n", elim);
+                    delet[0] = elim;
+                    break;
+                }
+            }
+            break;
+        }
         else
         {
             printf(" \n");
@@ -452,7 +1319,7 @@ void FDISK(char *x, char *y, char *z, char *v)
 
     printf("TERMINAR PROCESAMIENTO FDISK\n");
 
-    if (a == 1 && s == 1 && w == 1 && (u == 0 || u == 1))
+    /*if (a == 1 && s == 1 && w == 1 && (u == 0 || u == 1))
     {
         FILE *arch1;
         path[0][strcspn(path[0], "\n")] = 0;
@@ -512,7 +1379,7 @@ void FDISK(char *x, char *y, char *z, char *v)
         printf(" \n");
         printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
         printf(" \n");
-    }
+    }*/
 }
 
 void MKDISK(char *x, char *y, char *z, char *v)
@@ -529,15 +1396,20 @@ void MKDISK(char *x, char *y, char *z, char *v)
 
     int f = 0;
 
+    char dd[5] = "FF";
+    char d1[5] = "m";
+
     char *path[100];
     char *size[100];
     char *unit[100];
     char *fit[100];
 
-    fit[0] = "FF";
-    unit[0] = "m";
+    // fit[0] = "FF";
+    // unit[0] = "m";
 
     // unit[0] = "m";
+
+    // printf("%s %s\n", "Este es el fit:", fit[0]);
 
     printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
 
@@ -956,6 +1828,25 @@ void MKDISK(char *x, char *y, char *z, char *v)
 
     if (a == 1 && s == 1 && (u == 0 || u == 1) && (f == 0 || f == 1))
     {
+
+        if (f == 0)
+        {
+            printf("Valor Fit establecido automaticamente\n");
+            fit[0] = dd;
+        }
+        else
+        {
+            printf("Print Encontrado\n");
+        }
+        if (u == 0)
+        {
+            printf("Valor Unit establecido automaticamente\n");
+            unit[0] = d1;
+        }
+        else
+        {
+            printf("Print Encontrado\n");
+        }
         // Espera
         printf(" \n");
         FILE *arch;
@@ -971,46 +1862,84 @@ void MKDISK(char *x, char *y, char *z, char *v)
         fclose(arch);
 
         printf(" \n");
+        printf("%s %s\n", "Este es el fit:", fit[0]);
 
-        FILE *arch1;
-        arch1 = fopen(path[0], "ab");
-        if (arch1 == NULL)
-            exit(1);
-
-        MBR master;
-        int cont = 0;
-        printf(" Creando Archivo....\n");
-
-        time_t t;
-
-        t = time(NULL);
-
-        if ((strcmp(fit[0], "BF") == 0) || (strcmp(fit[0], "FF") == 0) || (strcmp(fit[0], "WF") == 0))
+        if ((strcmp(fit[0], "BF\n") == 0) || (strcmp(fit[0], "FF\n") == 0) || (strcmp(fit[0], "WF\n") == 0) || (strcmp(fit[0], "BF") == 0) || (strcmp(fit[0], "FF") == 0) || (strcmp(fit[0], "WF") == 0))
         {
-            if (strcmp(unit[0], "m") == 0)
+            printf("SI ENTRO AL FIT\n");
+
+            if ((strcmp(unit[0], "m") == 0) || (strcmp(unit[0], "m\n") == 0))
             {
+                printf("SI ENTRO AL UNIT\n");
+                FILE *arch1;
+                arch1 = fopen(path[0], "ab");
+                if (arch1 == NULL)
+                    exit(1);
+
+                MBR master;
+                int cont = 0;
+                printf(" Creando Archivo....\n");
+
+                time_t t;
+
+                t = time(NULL);
+
                 master.mbr_tamano = strtol(size[0], NULL, 10) * 1024 * 1024;
                 master.mbr_fecha_creacion = t;
                 master.mbr_dsk_signature = rand() % 500;
                 master.mbr_fit = fit[0];
 
                 printf("%s %d\n", "Este es el tamaño:", master.mbr_tamano);
+                printf("%s %ld\n", "Este es el fecha:", master.mbr_fecha_creacion);
+                printf("%s %d\n", "Este es el signatura:", master.mbr_dsk_signature);
+                printf("%s %s\n", "Este es el fit:", master.mbr_fit);
 
                 fwrite(&master, master.mbr_tamano, 1, arch1);
+
+                fclose(arch1);
+                printf(" \n");
+                printf("Creacion de Archivo Terminada\n");
+
+                printf(" \n");
             }
-            else if (strcmp(unit[0], "k") == 0)
+            else if ((strcmp(unit[0], "k") == 0) || (strcmp(unit[0], "k\n") == 0))
             {
+                printf("SI ENTRO AL UNIT\n");
+
+                FILE *arch1;
+                arch1 = fopen(path[0], "ab");
+                if (arch1 == NULL)
+                    exit(1);
+
+                MBR master;
+                int cont = 0;
+                printf(" Creando Archivo....\n");
+
+                time_t t;
+
+                t = time(NULL);
+
                 master.mbr_tamano = strtol(size[0], NULL, 10) * 1024;
                 master.mbr_fecha_creacion = t;
                 master.mbr_dsk_signature = rand() % 500;
                 master.mbr_fit = fit[0];
 
                 printf("%s %d\n", "Este es el tamaño:", master.mbr_tamano);
+                printf("%s %ld\n", "Este es el fecha:", master.mbr_fecha_creacion);
+                printf("%s %d\n", "Este es el signatura:", master.mbr_dsk_signature);
+                printf("%s %s\n", "Este es el fit:", master.mbr_fit);
 
                 fwrite(&master, master.mbr_tamano, 1, arch1);
+
+                fclose(arch1);
+                printf(" \n");
+                printf("Creacion de Archivo Terminada\n");
+
+                printf(" \n");
             }
             else
             {
+                printf("NO ENTRO AL UNIT\n");
                 printf(" \n");
                 printf("ERROR/Advertencia: valor inexistente u variable nula\n");
                 printf(" \n");
@@ -1018,16 +1947,11 @@ void MKDISK(char *x, char *y, char *z, char *v)
         }
         else
         {
+            printf("NO ENTRO AL FIT\n");
             printf(" \n");
             printf("ERROR/Advertencia: valor inexistente u variable nula\n");
             printf(" \n");
         }
-
-        fclose(arch1);
-        printf(" \n");
-        printf("Creacion de Archivo Terminada\n");
-
-        printf(" \n");
     }
     else
     {
@@ -1043,7 +1967,7 @@ void REP()
     printf("Procesando.... \n");
 
     FILE *arch;
-    arch = fopen("Archivo_Binario.dk", "rb");
+    arch = fopen("toto.dk", "rb");
     if (arch == NULL)
         exit(1);
 
@@ -1056,7 +1980,11 @@ void REP()
     printf("Fecha de Creacion: ");
     printf("%ld\n", maestro.mbr_fecha_creacion);
     printf("Signature: ");
-    printf("%d", maestro.mbr_dsk_signature);
+    printf("%d\n", maestro.mbr_dsk_signature);
+    printf("Fit: ");
+    printf("%s", maestro.mbr_fit);
+    /*printf("Particiones: ");
+    printf("%s", maestro.mbr_partcion[0].part_type);*/
 
     // while((maestro.Id_profesor = getchar()) != '\n' && maestro.Id_profesor != EOF);
     fread(&maestro, sizeof(MBR), 1, arch);
@@ -1084,6 +2012,9 @@ void EXEC(char *x)
     mknum[1] = NULL;
     mknum[2] = NULL;
     mknum[3] = NULL;
+    mknum[4] = NULL;
+    mknum[5] = NULL;
+    mknum[6] = NULL;
 
     if (strcmp(split, "-path") == 0)
     {
@@ -1208,13 +2139,45 @@ void EXEC(char *x)
                                     opcion = strtok(NULL, " ");
                                 }
                             }
-                            FDISK(mknum[0], mknum[1], mknum[2], mknum[3]);
+                            FDISK(mknum[0], mknum[1], mknum[2], mknum[3], mknum[4], mknum[5], mknum[6]);
                             cont = 0;
                             mknum[0] = NULL;
                             mknum[1] = NULL;
                             mknum[2] = NULL;
                             mknum[3] = NULL;
+                            mknum[4] = NULL;
+                            mknum[5] = NULL;
+                            mknum[6] = NULL;
                         }
+                        else if (strcmp(opcion, "rmdisk") == 0)
+                        {
+                            printf("EJECUTANDO: Comando rmdisk \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "rmdisk") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            RMDISK(mknum[0]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                        }
+
                         else if (strcmp(opcion, "rep\n") == 0)
                         {
                             printf("EJECUTANDO: Comando rep \n");
@@ -1264,6 +2227,9 @@ int main()
     mknum[1] = NULL;
     mknum[2] = NULL;
     mknum[3] = NULL;
+    mknum[4] = NULL;
+    mknum[5] = NULL;
+    mknum[6] = NULL;
 
     printf("\n");
 
@@ -1341,6 +2307,26 @@ int main()
                 }
             }
         }
+        else if (strcmp(split, "rmdisk") == 0)
+        {
+            printf("EJECUTANDO: Comando rmdisk \n");
+            printf("ADVERTENCIA: la dreccion del archivo NO debe tener espacios; Se mostrara ERROR \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "rmdisk") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    printf(" %s\n", split); // printing each token
+                    RMDISK(split);
+                    // split = strtok(NULL, " ");
+                    break;
+                }
+            }
+        }
         else if (strcmp(split, "fdisk") == 0)
         {
             printf("EJECUTANDO: Comando fdisk \n");
@@ -1364,12 +2350,15 @@ int main()
                     split = strtok(NULL, " ");
                 }
             }
-            FDISK(mknum[0], mknum[1], mknum[2], mknum[3]);
+            FDISK(mknum[0], mknum[1], mknum[2], mknum[3], mknum[4], mknum[5], mknum[6]);
             cont = 0;
             mknum[0] = NULL;
             mknum[1] = NULL;
             mknum[2] = NULL;
             mknum[3] = NULL;
+            mknum[4] = NULL;
+            mknum[5] = NULL;
+            mknum[6] = NULL;
         }
         else
         {
