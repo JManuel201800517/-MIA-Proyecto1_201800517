@@ -130,9 +130,15 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
     char *fit[100];
     char *delet[100];
 
+    char dd[5] = "W";
+    char d1[5] = "K";
+    char hu[5] = "P";
+    char ru[5] = "0";
+    char ru1[5] = "\0";
+
     // unit[0] = "m";
 
-    //printf("%s %d %d %d %d\n", "Prueba de parametros:", a, s, u, w);
+    // printf("%s %d %d %d %d\n", "Prueba de parametros:", a, s, u, w);
 
     char *split = strtok(x, igual);
     printf(" %s\n", split);
@@ -1319,67 +1325,1969 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
     printf("TERMINAR PROCESAMIENTO FDISK\n");
 
-    /*if (a == 1 && s == 1 && w == 1 && (u == 0 || u == 1))
+    if (a == 1 && s == 1 && w == 1 && (u == 0 || u == 1) && (ty1 == 0 || ty1 == 1) && (fi1 == 0 || fi1 == 1) && (del1 == 0 || del1 == 1))
     {
-        FILE *arch1;
-        path[0][strcspn(path[0], "\n")] = 0;
-        arch1 = fopen(path[0], "ab");
-        if (arch1 == NULL)
-            exit(1);
 
-        MBR master;
-        int cont = 0;
-        printf(" Creando Archivo....\n");
-
-        time_t t;
-
-        t = time(NULL);
-
-        if (strcmp(unit[0], "m") == 0)
+        if (strtol(size[0], NULL, 10) <= 0)
         {
-            master.mbr_tamano = strtol(size[0], NULL, 10) * 1000000;
-            master.mbr_fecha_creacion = t;
-            master.mbr_dsk_signature = rand() % 500;
-
-            fwrite(&master, strtol(size[0], NULL, 10) * 1000000, 1, arch1);
-        }
-        else if (strcmp(unit[0], "b") == 0)
-        {
-            master.mbr_tamano = strtol(size[0], NULL, 10);
-            master.mbr_fecha_creacion = t;
-            master.mbr_dsk_signature = rand() % 500;
-
-            fwrite(&master, strtol(size[0], NULL, 10), 1, arch1);
-        }
-        else if (strcmp(unit[0], "k") == 0)
-        {
-            master.mbr_tamano = strtol(size[0], NULL, 10) * 125;
-            master.mbr_fecha_creacion = t;
-            master.mbr_dsk_signature = rand() % 500;
-
-            fwrite(&master, strtol(size[0], NULL, 10) * 125, 1, arch1);
+            printf(" \n");
+            printf("ERROR NO SE PUEDE LLEVAR A CABO DICHA OPERACION\n");
+            printf(" \n");
         }
         else
         {
-            master.mbr_tamano = strtol(size[0], NULL, 10) * 1000000;
-            master.mbr_fecha_creacion = t;
-            master.mbr_dsk_signature = rand() % 500;
+            if (fi1 == 0)
+            {
+                printf("Valor Fit establecido automaticamente\n");
+                fit[0] = dd;
+            }
+            else
+            {
+                printf("Print Encontrado\n");
+            }
+            if (u == 0)
+            {
+                printf("Valor Unit establecido automaticamente\n");
+                unit[0] = d1;
+            }
+            else
+            {
+                printf("Print Encontrado\n");
+            }
+            if (ty1 == 0)
+            {
+                printf("Valor Type establecido automaticamente\n");
+                type[0] = hu;
+            }
+            else
+            {
+                printf("Print Encontrado\n");
+            }
 
-            fwrite(&master, strtol(size[0], NULL, 10) * 1000000, 1, arch1);
+            fit[0][strcspn(fit[0], "\n")] = 0;
+
+            if ((strcmp(fit[0], "B") == 0) || (strcmp(fit[0], "F") == 0) || (strcmp(fit[0], "W") == 0) || (strcmp(fit[0], "BF") == 0) || (strcmp(fit[0], "FF") == 0) || (strcmp(fit[0], "WF") == 0))
+            {
+                type[0][strcspn(type[0], "\n")] = 0;
+
+                if ((strcmp(type[0], "P") == 0) || (strcmp(type[0], "E") == 0) || (strcmp(type[0], "L") == 0))
+                {
+                    if (del1 == 0)
+                    {
+                        unit[0][strcspn(unit[0], "\n")] = 0;
+
+                        if ((strcmp(unit[0], "m") == 0) || (strcmp(unit[0], "M") == 0))
+                        {
+                            FILE *arch1;
+                            arch1 = fopen(path[0], "r+b");
+                            if (arch1 == NULL)
+                                exit(1);
+
+                            MBR master;
+                            int cont = 0;
+                            int existe = 1;
+                            printf(" Actualizando Archivo....\n");
+
+                            time_t t;
+
+                            t = time(NULL);
+
+                            fread(&master, sizeof(MBR), 1, arch1);
+
+                            while (!feof(arch1))
+                            {
+                                if (master.mbr_partcion[0].part_start == -1)
+                                {
+                                    printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                    printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                    printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                    printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                    printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                    if (strtol(size[0], NULL, 10) <= master.mbr_tamano)
+                                    {
+                                        name[0][strcspn(name[0], "\n")] = 0;
+
+                                        if (name[0] != master.mbr_partcion[0].part_name)
+                                        {
+                                            master.mbr_partcion[0].part_type = type[0];
+                                            master.mbr_partcion[0].part_fit = fit[0];
+                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
+                                            master.mbr_partcion[0].part_start = ftell(arch1);
+                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            printf("NO ENTRO A LA MODIFICACION\n");
+                                            printf(" \n");
+                                            printf("Particion Repetida\n");
+                                            printf(" \n");
+                                            existe = 0;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        printf("NO ENTRO A LA MODIFICACION\n");
+                                        printf(" \n");
+                                        printf("ERROR/Advertencia: Particion muy grande\n");
+                                        printf(" \n");
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (master.mbr_partcion[1].part_start == -1)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                        if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size)
+                                        {
+                                            name[0][strcspn(name[0], "\n")] = 0;
+
+                                            if (name[0] != master.mbr_partcion[1].part_name)
+                                            {
+                                                master.mbr_partcion[1].part_type = type[0];
+                                                master.mbr_partcion[1].part_fit = fit[0];
+                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
+                                                master.mbr_partcion[1].part_start = ftell(arch1);
+                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                printf("NO ENTRO A LA MODIFICACION\n");
+                                                printf(" \n");
+                                                printf("Particion Repetida\n");
+                                                printf(" \n");
+                                                existe = 0;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            printf("NO ENTRO A LA MODIFICACION\n");
+                                            printf(" \n");
+                                            printf("ERROR/Advertencia: Particion muy grande\n");
+                                            printf(" \n");
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (master.mbr_partcion[2].part_start == -1)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                            if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size - master.mbr_partcion[1].part_size)
+                                            {
+                                                name[0][strcspn(name[0], "\n")] = 0;
+
+                                                if (name[0] != master.mbr_partcion[2].part_name)
+                                                {
+                                                    master.mbr_partcion[2].part_type = type[0];
+                                                    master.mbr_partcion[2].part_fit = fit[0];
+                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
+                                                    master.mbr_partcion[2].part_start = ftell(arch1);
+                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO ENTRO A LA MODIFICACION\n");
+                                                    printf(" \n");
+                                                    printf("Particion Repetida\n");
+                                                    printf(" \n");
+                                                    existe = 0;
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                printf("NO ENTRO A LA MODIFICACION\n");
+                                                printf(" \n");
+                                                printf("ERROR/Advertencia: Particion muy grande\n");
+                                                printf(" \n");
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (master.mbr_partcion[3].part_start == -1)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size - master.mbr_partcion[1].part_size - master.mbr_partcion[2].part_size)
+                                                {
+                                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                                    if (name[0] != master.mbr_partcion[3].part_name)
+                                                    {
+                                                        master.mbr_partcion[3].part_type = type[0];
+                                                        master.mbr_partcion[3].part_fit = fit[0];
+                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
+                                                        master.mbr_partcion[3].part_start = ftell(arch1);
+                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+                                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                                        fseek(arch1, pos, SEEK_SET);
+                                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                                        printf("Se modifico los datos de la particion.\n");
+                                                        existe = 1;
+
+                                                        printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                        printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                        printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                        printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                        printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        printf("NO ENTRO A LA MODIFICACION\n");
+                                                        printf(" \n");
+                                                        printf("Particion Repetida\n");
+                                                        printf(" \n");
+                                                        existe = 0;
+                                                        break;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    printf("NO ENTRO A LA MODIFICACION\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: Particion muy grande\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                printf("NO HAY MAS PARTICIONES\n");
+                                                printf(" \n");
+                                                printf("ERROR/Advertencia: NO SE PUEDEN HACER MAS PARTICIONES\n");
+                                                printf(" \n");
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+                            }
+
+                            if (existe == 0)
+                                printf("Ya existe la particion\n");
+                            fclose(arch1);
+                        }
+                        else if ((strcmp(unit[0], "b") == 0) || (strcmp(unit[0], "B") == 0))
+                        {
+                            FILE *arch1;
+                            arch1 = fopen(path[0], "r+b");
+                            if (arch1 == NULL)
+                                exit(1);
+
+                            MBR master;
+                            int cont = 0;
+                            int existe = 1;
+                            printf(" Actualizando Archivo....\n");
+
+                            time_t t;
+
+                            t = time(NULL);
+
+                            fread(&master, sizeof(MBR), 1, arch1);
+
+                            while (!feof(arch1))
+                            {
+                                if (master.mbr_partcion[0].part_start == -1)
+                                {
+                                    printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                    printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                    printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                    printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                    printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                    if (strtol(size[0], NULL, 10) <= master.mbr_tamano)
+                                    {
+                                        name[0][strcspn(name[0], "\n")] = 0;
+
+                                        if (name[0] != master.mbr_partcion[0].part_name)
+                                        {
+                                            master.mbr_partcion[0].part_type = type[0];
+                                            master.mbr_partcion[0].part_fit = fit[0];
+                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
+                                            master.mbr_partcion[0].part_start = ftell(arch1);
+                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10);
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            printf("NO ENTRO A LA MODIFICACION\n");
+                                            printf(" \n");
+                                            printf("Particion Repetida\n");
+                                            printf(" \n");
+                                            existe = 0;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        printf("NO ENTRO A LA MODIFICACION\n");
+                                        printf(" \n");
+                                        printf("ERROR/Advertencia: Particion muy grande\n");
+                                        printf(" \n");
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (master.mbr_partcion[1].part_start == -1)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                        if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size)
+                                        {
+                                            name[0][strcspn(name[0], "\n")] = 0;
+
+                                            if (name[0] != master.mbr_partcion[1].part_name)
+                                            {
+                                                master.mbr_partcion[1].part_type = type[0];
+                                                master.mbr_partcion[1].part_fit = fit[0];
+                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
+                                                master.mbr_partcion[1].part_start = ftell(arch1);
+                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10);
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                printf("NO ENTRO A LA MODIFICACION\n");
+                                                printf(" \n");
+                                                printf("Particion Repetida\n");
+                                                printf(" \n");
+                                                existe = 0;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            printf("NO ENTRO A LA MODIFICACION\n");
+                                            printf(" \n");
+                                            printf("ERROR/Advertencia: Particion muy grande\n");
+                                            printf(" \n");
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (master.mbr_partcion[2].part_start == -1)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                            if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size - master.mbr_partcion[1].part_size)
+                                            {
+                                                name[0][strcspn(name[0], "\n")] = 0;
+
+                                                if (name[0] != master.mbr_partcion[2].part_name)
+                                                {
+                                                    master.mbr_partcion[2].part_type = type[0];
+                                                    master.mbr_partcion[2].part_fit = fit[0];
+                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
+                                                    master.mbr_partcion[2].part_start = ftell(arch1);
+                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10);
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO ENTRO A LA MODIFICACION\n");
+                                                    printf(" \n");
+                                                    printf("Particion Repetida\n");
+                                                    printf(" \n");
+                                                    existe = 0;
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                printf("NO ENTRO A LA MODIFICACION\n");
+                                                printf(" \n");
+                                                printf("ERROR/Advertencia: Particion muy grande\n");
+                                                printf(" \n");
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (master.mbr_partcion[3].part_start == -1)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size - master.mbr_partcion[1].part_size - master.mbr_partcion[2].part_size)
+                                                {
+                                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                                    if (name[0] != master.mbr_partcion[3].part_name)
+                                                    {
+                                                        master.mbr_partcion[3].part_type = type[0];
+                                                        master.mbr_partcion[3].part_fit = fit[0];
+                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
+                                                        master.mbr_partcion[3].part_start = ftell(arch1);
+                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10);
+                                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                                        fseek(arch1, pos, SEEK_SET);
+                                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                                        printf("Se modifico los datos de la particion.\n");
+                                                        existe = 1;
+
+                                                        printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                        printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                        printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                        printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                        printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        printf("NO ENTRO A LA MODIFICACION\n");
+                                                        printf(" \n");
+                                                        printf("Particion Repetida\n");
+                                                        printf(" \n");
+                                                        existe = 0;
+                                                        break;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    printf("NO ENTRO A LA MODIFICACION\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: Particion muy grande\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                printf("NO HAY MAS PARTICIONES\n");
+                                                printf(" \n");
+                                                printf("ERROR/Advertencia: NO SE PUEDEN HACER MAS PARTICIONES\n");
+                                                printf(" \n");
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+                            }
+
+                            if (existe == 0)
+                                printf("Ya existe la particion\n");
+                            fclose(arch1);
+                        }
+                        else if ((strcmp(unit[0], "k") == 0) || (strcmp(unit[0], "K") == 0))
+                        {
+                            FILE *arch1;
+                            arch1 = fopen(path[0], "r+b");
+                            if (arch1 == NULL)
+                                exit(1);
+
+                            MBR master;
+                            int cont = 0;
+                            int existe = 1;
+                            printf(" Actualizando Archivo....\n");
+
+                            time_t t;
+
+                            t = time(NULL);
+
+                            fread(&master, sizeof(MBR), 1, arch1);
+
+                            while (!feof(arch1))
+                            {
+                                if (master.mbr_partcion[0].part_start == -1)
+                                {
+                                    printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                    printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                    printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                    printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                    printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                    if (strtol(size[0], NULL, 10) <= master.mbr_tamano)
+                                    {
+                                        name[0][strcspn(name[0], "\n")] = 0;
+
+                                        if (name[0] != master.mbr_partcion[0].part_name)
+                                        {
+                                            master.mbr_partcion[0].part_type = type[0];
+                                            master.mbr_partcion[0].part_fit = fit[0];
+                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
+                                            master.mbr_partcion[0].part_start = ftell(arch1);
+                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10) * 1024;
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            printf("NO ENTRO A LA MODIFICACION\n");
+                                            printf(" \n");
+                                            printf("Particion Repetida\n");
+                                            printf(" \n");
+                                            existe = 0;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        printf("NO ENTRO A LA MODIFICACION\n");
+                                        printf(" \n");
+                                        printf("ERROR/Advertencia: Particion muy grande\n");
+                                        printf(" \n");
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (master.mbr_partcion[1].part_start == -1)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                        if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size)
+                                        {
+                                            name[0][strcspn(name[0], "\n")] = 0;
+
+                                            if (name[0] != master.mbr_partcion[1].part_name)
+                                            {
+                                                master.mbr_partcion[1].part_type = type[0];
+                                                master.mbr_partcion[1].part_fit = fit[0];
+                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
+                                                master.mbr_partcion[1].part_start = ftell(arch1);
+                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10) * 1024;
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                printf("NO ENTRO A LA MODIFICACION\n");
+                                                printf(" \n");
+                                                printf("Particion Repetida\n");
+                                                printf(" \n");
+                                                existe = 0;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            printf("NO ENTRO A LA MODIFICACION\n");
+                                            printf(" \n");
+                                            printf("ERROR/Advertencia: Particion muy grande\n");
+                                            printf(" \n");
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (master.mbr_partcion[2].part_start == -1)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                            if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size - master.mbr_partcion[1].part_size)
+                                            {
+                                                name[0][strcspn(name[0], "\n")] = 0;
+
+                                                if (name[0] != master.mbr_partcion[2].part_name)
+                                                {
+                                                    master.mbr_partcion[2].part_type = type[0];
+                                                    master.mbr_partcion[2].part_fit = fit[0];
+                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
+                                                    master.mbr_partcion[2].part_start = ftell(arch1);
+                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10) * 1024;
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO ENTRO A LA MODIFICACION\n");
+                                                    printf(" \n");
+                                                    printf("Particion Repetida\n");
+                                                    printf(" \n");
+                                                    existe = 0;
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                printf("NO ENTRO A LA MODIFICACION\n");
+                                                printf(" \n");
+                                                printf("ERROR/Advertencia: Particion muy grande\n");
+                                                printf(" \n");
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (master.mbr_partcion[3].part_start == -1)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                if (strtol(size[0], NULL, 10) <= master.mbr_tamano - master.mbr_partcion[0].part_size - master.mbr_partcion[1].part_size - master.mbr_partcion[2].part_size)
+                                                {
+                                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                                    if (name[0] != master.mbr_partcion[3].part_name)
+                                                    {
+                                                        master.mbr_partcion[3].part_type = type[0];
+                                                        master.mbr_partcion[3].part_fit = fit[0];
+                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
+                                                        master.mbr_partcion[3].part_start = ftell(arch1);
+                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10) * 1024;
+                                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                                        fseek(arch1, pos, SEEK_SET);
+                                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                                        printf("Se modifico los datos de la particion.\n");
+                                                        existe = 1;
+
+                                                        printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                        printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                        printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                        printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                        printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        printf("NO ENTRO A LA MODIFICACION\n");
+                                                        printf(" \n");
+                                                        printf("Particion Repetida\n");
+                                                        printf(" \n");
+                                                        existe = 0;
+                                                        break;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    printf("NO ENTRO A LA MODIFICACION\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: Particion muy grande\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                printf("NO HAY MAS PARTICIONES\n");
+                                                printf(" \n");
+                                                printf("ERROR/Advertencia: NO SE PUEDEN HACER MAS PARTICIONES\n");
+                                                printf(" \n");
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+                            }
+
+                            if (existe == 0)
+                                printf("Ya existe la particion\n");
+                            fclose(arch1);
+                        }
+                        else
+                        {
+                            printf("NO ENTRO AL UNIT\n");
+                            printf(" \n");
+                            printf("ERROR/Advertencia: valor inexistente u variable nula\n");
+                            printf(" \n");
+                        }
+                    }
+                    else if (del1 == 1)
+                    {
+                        if (strcmp(delet[0], "FAST") == 0)
+                        {
+                            unit[0][strcspn(unit[0], "\n")] = 0;
+
+                            if ((strcmp(unit[0], "m") == 0) || (strcmp(unit[0], "M") == 0))
+                            {
+                                FILE *arch1;
+                                arch1 = fopen(path[0], "r+b");
+                                if (arch1 == NULL)
+                                    exit(1);
+
+                                MBR master;
+                                int cont = 0;
+                                int existe = 1;
+                                printf(" Actualizando Archivo....\n");
+
+                                time_t t;
+
+                                t = time(NULL);
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+
+                                while (!feof(arch1))
+                                {
+                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                    if (name[0] == master.mbr_partcion[0].part_name)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        delet[0] = ru;
+
+                                        master.mbr_partcion[0].part_type = delet[0];
+                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        master.mbr_partcion[0].part_start = 0;
+                                        master.mbr_partcion[0].part_size = 0;
+                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                        fseek(arch1, pos, SEEK_SET);
+                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                        printf("Se modifico los datos de la particion.\n");
+                                        existe = 1;
+
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (name[0] == master.mbr_partcion[1].part_name)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            delet[0] = ru;
+
+                                            master.mbr_partcion[1].part_type = delet[0];
+                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            master.mbr_partcion[1].part_start = 0;
+                                            master.mbr_partcion[1].part_size = 0;
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            if (name[0] == master.mbr_partcion[2].part_name)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                delet[0] = ru;
+
+                                                master.mbr_partcion[2].part_type = delet[0];
+                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                master.mbr_partcion[2].part_start = 0;
+                                                master.mbr_partcion[2].part_size = 0;
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                if (name[0] == master.mbr_partcion[3].part_name)
+                                                {
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    delet[0] = ru;
+
+                                                    master.mbr_partcion[3].part_type = delet[0];
+                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    master.mbr_partcion[3].part_start = 0;
+                                                    master.mbr_partcion[3].part_size = 0;
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO HAY MAS PARTICIONES\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: No se encontro Particion\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    fread(&master, sizeof(MBR), 1, arch1);
+                                }
+
+                                if (existe == 0)
+                                    printf("Ya existe la particion\n");
+                                fclose(arch1);
+                            }
+                            else if ((strcmp(unit[0], "b") == 0) || (strcmp(unit[0], "B") == 0))
+                            {
+                                FILE *arch1;
+                                arch1 = fopen(path[0], "r+b");
+                                if (arch1 == NULL)
+                                    exit(1);
+
+                                MBR master;
+                                int cont = 0;
+                                int existe = 1;
+                                printf(" Actualizando Archivo....\n");
+
+                                time_t t;
+
+                                t = time(NULL);
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+
+                                while (!feof(arch1))
+                                {
+                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                    if (name[0] == master.mbr_partcion[0].part_name)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        delet[0] = ru;
+
+                                        master.mbr_partcion[0].part_type = delet[0];
+                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        master.mbr_partcion[0].part_start = 0;
+                                        master.mbr_partcion[0].part_size = 0;
+                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                        fseek(arch1, pos, SEEK_SET);
+                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                        printf("Se modifico los datos de la particion.\n");
+                                        existe = 1;
+
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (name[0] == master.mbr_partcion[1].part_name)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            delet[0] = ru;
+
+                                            master.mbr_partcion[1].part_type = delet[0];
+                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            master.mbr_partcion[1].part_start = 0;
+                                            master.mbr_partcion[1].part_size = 0;
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            if (name[0] == master.mbr_partcion[2].part_name)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                delet[0] = ru;
+
+                                                master.mbr_partcion[2].part_type = delet[0];
+                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                master.mbr_partcion[2].part_start = 0;
+                                                master.mbr_partcion[2].part_size = 0;
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                if (name[0] == master.mbr_partcion[3].part_name)
+                                                {
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    delet[0] = ru;
+
+                                                    master.mbr_partcion[3].part_type = delet[0];
+                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    master.mbr_partcion[3].part_start = 0;
+                                                    master.mbr_partcion[3].part_size = 0;
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO HAY MAS PARTICIONES\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: No se encontro Particion\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    fread(&master, sizeof(MBR), 1, arch1);
+                                }
+
+                                if (existe == 0)
+                                    printf("Ya existe la particion\n");
+                                fclose(arch1);
+                            }
+                            else if ((strcmp(unit[0], "k") == 0) || (strcmp(unit[0], "K") == 0))
+                            {
+                                FILE *arch1;
+                                arch1 = fopen(path[0], "r+b");
+                                if (arch1 == NULL)
+                                    exit(1);
+
+                                MBR master;
+                                int cont = 0;
+                                int existe = 1;
+                                printf(" Actualizando Archivo....\n");
+
+                                time_t t;
+
+                                t = time(NULL);
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+
+                                while (!feof(arch1))
+                                {
+                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                    if (name[0] == master.mbr_partcion[0].part_name)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        delet[0] = ru;
+
+                                        master.mbr_partcion[0].part_type = delet[0];
+                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        master.mbr_partcion[0].part_start = 0;
+                                        master.mbr_partcion[0].part_size = 0;
+                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                        fseek(arch1, pos, SEEK_SET);
+                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                        printf("Se modifico los datos de la particion.\n");
+                                        existe = 1;
+
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (name[0] == master.mbr_partcion[1].part_name)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            delet[0] = ru;
+
+                                            master.mbr_partcion[1].part_type = delet[0];
+                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            master.mbr_partcion[1].part_start = 0;
+                                            master.mbr_partcion[1].part_size = 0;
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            if (name[0] == master.mbr_partcion[2].part_name)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                delet[0] = ru;
+
+                                                master.mbr_partcion[2].part_type = delet[0];
+                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                master.mbr_partcion[2].part_start = 0;
+                                                master.mbr_partcion[2].part_size = 0;
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                if (name[0] == master.mbr_partcion[3].part_name)
+                                                {
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    delet[0] = ru;
+
+                                                    master.mbr_partcion[3].part_type = delet[0];
+                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    master.mbr_partcion[3].part_start = 0;
+                                                    master.mbr_partcion[3].part_size = 0;
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO HAY MAS PARTICIONES\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: No se encontro Particion\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    fread(&master, sizeof(MBR), 1, arch1);
+                                }
+
+                                if (existe == 0)
+                                    printf("Ya existe la particion\n");
+                                fclose(arch1);
+                            }
+                            else
+                            {
+                                printf("NO ENTRO AL UNIT\n");
+                                printf(" \n");
+                                printf("ERROR/Advertencia: valor inexistente u variable nula\n");
+                                printf(" \n");
+                            }
+                        }
+                        else if (strcmp(delet[0], "FULL") == 0)
+                        {
+                            unit[0][strcspn(unit[0], "\n")] = 0;
+
+                            if ((strcmp(unit[0], "m") == 0) || (strcmp(unit[0], "M") == 0))
+                            {
+                                FILE *arch1;
+                                arch1 = fopen(path[0], "r+b");
+                                if (arch1 == NULL)
+                                    exit(1);
+
+                                MBR master;
+                                int cont = 0;
+                                int existe = 1;
+                                printf(" Actualizando Archivo....\n");
+
+                                time_t t;
+
+                                t = time(NULL);
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+
+                                while (!feof(arch1))
+                                {
+                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                    if (name[0] == master.mbr_partcion[0].part_name)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        delet[0] = ru1;
+
+                                        master.mbr_partcion[0].part_type = delet[0];
+                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        master.mbr_partcion[0].part_start = 0;
+                                        master.mbr_partcion[0].part_size = 0;
+                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                        fseek(arch1, pos, SEEK_SET);
+                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                        printf("Se modifico los datos de la particion.\n");
+                                        existe = 1;
+
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (name[0] == master.mbr_partcion[1].part_name)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            delet[0] = ru1;
+
+                                            master.mbr_partcion[1].part_type = delet[0];
+                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            master.mbr_partcion[1].part_start = 0;
+                                            master.mbr_partcion[1].part_size = 0;
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            if (name[0] == master.mbr_partcion[2].part_name)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                delet[0] = ru1;
+
+                                                master.mbr_partcion[2].part_type = delet[0];
+                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                master.mbr_partcion[2].part_start = 0;
+                                                master.mbr_partcion[2].part_size = 0;
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                if (name[0] == master.mbr_partcion[3].part_name)
+                                                {
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    delet[0] = ru1;
+
+                                                    master.mbr_partcion[3].part_type = delet[0];
+                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    master.mbr_partcion[3].part_start = 0;
+                                                    master.mbr_partcion[3].part_size = 0;
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO HAY MAS PARTICIONES\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: No se encontro Particion\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    fread(&master, sizeof(MBR), 1, arch1);
+                                }
+
+                                if (existe == 0)
+                                    printf("Ya existe la particion\n");
+                                fclose(arch1);
+                            }
+                            else if ((strcmp(unit[0], "b") == 0) || (strcmp(unit[0], "B") == 0))
+                            {
+                                FILE *arch1;
+                                arch1 = fopen(path[0], "r+b");
+                                if (arch1 == NULL)
+                                    exit(1);
+
+                                MBR master;
+                                int cont = 0;
+                                int existe = 1;
+                                printf(" Actualizando Archivo....\n");
+
+                                time_t t;
+
+                                t = time(NULL);
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+
+                                while (!feof(arch1))
+                                {
+                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                    if (name[0] == master.mbr_partcion[0].part_name)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        delet[0] = ru1;
+
+                                        master.mbr_partcion[0].part_type = delet[0];
+                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        master.mbr_partcion[0].part_start = 0;
+                                        master.mbr_partcion[0].part_size = 0;
+                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                        fseek(arch1, pos, SEEK_SET);
+                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                        printf("Se modifico los datos de la particion.\n");
+                                        existe = 1;
+
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (name[0] == master.mbr_partcion[1].part_name)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            delet[0] = ru1;
+
+                                            master.mbr_partcion[1].part_type = delet[0];
+                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            master.mbr_partcion[1].part_start = 0;
+                                            master.mbr_partcion[1].part_size = 0;
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            if (name[0] == master.mbr_partcion[2].part_name)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                delet[0] = ru1;
+
+                                                master.mbr_partcion[2].part_type = delet[0];
+                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                master.mbr_partcion[2].part_start = 0;
+                                                master.mbr_partcion[2].part_size = 0;
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                if (name[0] == master.mbr_partcion[3].part_name)
+                                                {
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    delet[0] = ru1;
+
+                                                    master.mbr_partcion[3].part_type = delet[0];
+                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    master.mbr_partcion[3].part_start = 0;
+                                                    master.mbr_partcion[3].part_size = 0;
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO HAY MAS PARTICIONES\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: No se encontro Particion\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    fread(&master, sizeof(MBR), 1, arch1);
+                                }
+
+                                if (existe == 0)
+                                    printf("Ya existe la particion\n");
+                                fclose(arch1);
+                            }
+                            else if ((strcmp(unit[0], "k") == 0) || (strcmp(unit[0], "K") == 0))
+                            {
+                                FILE *arch1;
+                                arch1 = fopen(path[0], "r+b");
+                                if (arch1 == NULL)
+                                    exit(1);
+
+                                MBR master;
+                                int cont = 0;
+                                int existe = 1;
+                                printf(" Actualizando Archivo....\n");
+
+                                time_t t;
+
+                                t = time(NULL);
+
+                                fread(&master, sizeof(MBR), 1, arch1);
+
+                                while (!feof(arch1))
+                                {
+                                    name[0][strcspn(name[0], "\n")] = 0;
+
+                                    if (name[0] == master.mbr_partcion[0].part_name)
+                                    {
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        delet[0] = ru1;
+
+                                        master.mbr_partcion[0].part_type = delet[0];
+                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        master.mbr_partcion[0].part_start = 0;
+                                        master.mbr_partcion[0].part_size = 0;
+                                        int pos = ftell(arch1) - sizeof(MBR);
+
+                                        fseek(arch1, pos, SEEK_SET);
+                                        fwrite(&master, sizeof(MBR), 1, arch1);
+                                        printf("Se modifico los datos de la particion.\n");
+                                        existe = 1;
+
+                                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (name[0] == master.mbr_partcion[1].part_name)
+                                        {
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            delet[0] = ru1;
+
+                                            master.mbr_partcion[1].part_type = delet[0];
+                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            master.mbr_partcion[1].part_start = 0;
+                                            master.mbr_partcion[1].part_size = 0;
+                                            int pos = ftell(arch1) - sizeof(MBR);
+
+                                            fseek(arch1, pos, SEEK_SET);
+                                            fwrite(&master, sizeof(MBR), 1, arch1);
+                                            printf("Se modifico los datos de la particion.\n");
+                                            existe = 1;
+
+                                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            if (name[0] == master.mbr_partcion[2].part_name)
+                                            {
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                delet[0] = ru1;
+
+                                                master.mbr_partcion[2].part_type = delet[0];
+                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                master.mbr_partcion[2].part_start = 0;
+                                                master.mbr_partcion[2].part_size = 0;
+                                                int pos = ftell(arch1) - sizeof(MBR);
+
+                                                fseek(arch1, pos, SEEK_SET);
+                                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                                printf("Se modifico los datos de la particion.\n");
+                                                existe = 1;
+
+                                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                if (name[0] == master.mbr_partcion[3].part_name)
+                                                {
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    delet[0] = ru1;
+
+                                                    master.mbr_partcion[3].part_type = delet[0];
+                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    master.mbr_partcion[3].part_start = 0;
+                                                    master.mbr_partcion[3].part_size = 0;
+                                                    int pos = ftell(arch1) - sizeof(MBR);
+
+                                                    fseek(arch1, pos, SEEK_SET);
+                                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                                    printf("Se modifico los datos de la particion.\n");
+                                                    existe = 1;
+
+                                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    printf("NO HAY MAS PARTICIONES\n");
+                                                    printf(" \n");
+                                                    printf("ERROR/Advertencia: No se encontro Particion\n");
+                                                    printf(" \n");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    fread(&master, sizeof(MBR), 1, arch1);
+                                }
+
+                                if (existe == 0)
+                                    printf("Ya existe la particion\n");
+                                fclose(arch1);
+                            }
+                            else
+                            {
+                                printf("NO ENTRO AL UNIT\n");
+                                printf(" \n");
+                                printf("ERROR/Advertencia: valor inexistente u variable nula\n");
+                                printf(" \n");
+                            }
+                        
+                        }
+                    }
+                    else
+                    {
+                        printf("NO ENTRO A LA MODIFICACION\n");
+                        printf(" \n");
+                        printf("ERROR/Advertencia: Necesita modificar o eliminar archivo\n");
+                        printf(" \n");
+                    }
+                }
+                else
+                {
+                    printf("NO ENTRO AL Type\n");
+                    printf(" \n");
+                    printf("ERROR/Advertencia: valor inexistente u variable nula\n");
+                    printf(" \n");
+                }
+            }
+            else
+            {
+                printf("NO ENTRO AL FIT\n");
+                printf(" \n");
+                printf("ERROR/Advertencia: valor inexistente u variable nula\n");
+                printf(" \n");
+            }
+
+            // fclose(arch1);
+            printf(" \n");
+            printf("Termino de carga de Datos\n");
+
+            printf(" \n");
         }
-
-        fclose(arch1);
-        printf(" \n");
-        printf("Termino de carga de Datos\n");
-
-        printf(" \n");
     }
     else
     {
         printf(" \n");
         printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
         printf(" \n");
-    }*/
+    }
 }
 
 void MKDISK(char *x, char *y, char *z, char *v)
@@ -1396,13 +3304,18 @@ void MKDISK(char *x, char *y, char *z, char *v)
 
     int f = 0;
 
-    char dd[5] = "FF";
+    int part = 0;
+
+    char dd[5] = "F";
     char d1[5] = "m";
+    char hu[5] = "0";
 
     char *path[100];
     char *size[100];
     char *unit[100];
     char *fit[100];
+
+    char *cero[100];
 
     // fit[0] = "FF";
     // unit[0] = "m";
@@ -1828,6 +3741,7 @@ void MKDISK(char *x, char *y, char *z, char *v)
 
     if (a == 1 && s == 1 && (u == 0 || u == 1) && (f == 0 || f == 1))
     {
+        cero[0] = hu;
 
         if (f == 0)
         {
@@ -1864,11 +3778,15 @@ void MKDISK(char *x, char *y, char *z, char *v)
         printf(" \n");
         printf("%s %s\n", "Este es el fit:", fit[0]);
 
-        if ((strcmp(fit[0], "BF\n") == 0) || (strcmp(fit[0], "FF\n") == 0) || (strcmp(fit[0], "WF\n") == 0) || (strcmp(fit[0], "BF") == 0) || (strcmp(fit[0], "FF") == 0) || (strcmp(fit[0], "WF") == 0))
+        fit[0][strcspn(fit[0], "\n")] = 0;
+
+        if ((strcmp(fit[0], "B") == 0) || (strcmp(fit[0], "F") == 0) || (strcmp(fit[0], "W") == 0) || (strcmp(fit[0], "BF") == 0) || (strcmp(fit[0], "FF") == 0) || (strcmp(fit[0], "WF") == 0))
         {
             printf("SI ENTRO AL FIT\n");
 
-            if ((strcmp(unit[0], "m") == 0) || (strcmp(unit[0], "m\n") == 0))
+            unit[0][strcspn(unit[0], "\n")] = 0;
+
+            if ((strcmp(unit[0], "m") == 0) || (strcmp(unit[0], "M") == 0))
             {
                 printf("SI ENTRO AL UNIT\n");
                 FILE *arch1;
@@ -1889,6 +3807,25 @@ void MKDISK(char *x, char *y, char *z, char *v)
                 master.mbr_dsk_signature = rand() % 500;
                 master.mbr_fit = fit[0];
 
+                while (part <= 3)
+                {
+                    master.mbr_partcion[part].part_status = cero[0];
+                    master.mbr_partcion[part].part_type = cero[0];
+                    master.mbr_partcion[part].part_fit = cero[0];
+                    master.mbr_partcion[part].part_start = -1;
+                    master.mbr_partcion[part].part_size = 0;
+                    strcpy(master.mbr_partcion[part].part_name, "");
+
+                    printf("%s %s\n", "Type: ", master.mbr_partcion[part].part_type);
+                    printf("%s %s\n", "Status: ", master.mbr_partcion[part].part_status);
+                    printf("%s %s\n", "Name: ", master.mbr_partcion[part].part_name);
+                    printf("%s %s\n", "Fit: ", master.mbr_partcion[part].part_fit);
+                    printf("%s %d\n", "Start: ", master.mbr_partcion[part].part_start);
+                    printf("%s %d\n", "Size: ", master.mbr_partcion[part].part_size);
+
+                    part = part + 1;
+                }
+
                 printf("%s %d\n", "Este es el tamaño:", master.mbr_tamano);
                 printf("%s %ld\n", "Este es el fecha:", master.mbr_fecha_creacion);
                 printf("%s %d\n", "Este es el signatura:", master.mbr_dsk_signature);
@@ -1902,7 +3839,7 @@ void MKDISK(char *x, char *y, char *z, char *v)
 
                 printf(" \n");
             }
-            else if ((strcmp(unit[0], "k") == 0) || (strcmp(unit[0], "k\n") == 0))
+            else if ((strcmp(unit[0], "k") == 0) || (strcmp(unit[0], "K") == 0))
             {
                 printf("SI ENTRO AL UNIT\n");
 
@@ -1923,6 +3860,25 @@ void MKDISK(char *x, char *y, char *z, char *v)
                 master.mbr_fecha_creacion = t;
                 master.mbr_dsk_signature = rand() % 500;
                 master.mbr_fit = fit[0];
+
+                while (part <= 3)
+                {
+                    master.mbr_partcion[part].part_status = cero[0];
+                    master.mbr_partcion[part].part_type = cero[0];
+                    master.mbr_partcion[part].part_fit = cero[0];
+                    master.mbr_partcion[part].part_start = -1;
+                    master.mbr_partcion[part].part_size = 0;
+                    strcpy(master.mbr_partcion[part].part_name, "");
+
+                    printf("%s %s\n", "Type: ", master.mbr_partcion[part].part_type);
+                    printf("%s %s\n", "Status: ", master.mbr_partcion[part].part_status);
+                    printf("%s %s\n", "Name: ", master.mbr_partcion[part].part_name);
+                    printf("%s %s\n", "Fit: ", master.mbr_partcion[part].part_fit);
+                    printf("%s %d\n", "Start: ", master.mbr_partcion[part].part_start);
+                    printf("%s %d\n", "Size: ", master.mbr_partcion[part].part_size);
+
+                    part = part + 1;
+                }
 
                 printf("%s %d\n", "Este es el tamaño:", master.mbr_tamano);
                 printf("%s %ld\n", "Este es el fecha:", master.mbr_fecha_creacion);
@@ -1965,6 +3921,7 @@ void REP()
 {
     printf(" \n");
     printf("Procesando.... \n");
+    int part = 0;
 
     FILE *arch;
     arch = fopen("toto.dk", "rb");
@@ -1982,9 +3939,21 @@ void REP()
     printf("Signature: ");
     printf("%d\n", maestro.mbr_dsk_signature);
     printf("Fit: ");
-    printf("%s", maestro.mbr_fit);
-    /*printf("Particiones: ");
-    printf("%s", maestro.mbr_partcion[0].part_type);*/
+    printf("%s\n", maestro.mbr_fit);
+    printf("Particiones: \n");
+
+    while (part <= 3)
+    {
+
+        printf("%s %s\n", "Type: ", maestro.mbr_partcion[part].part_type);
+        printf("%s %s\n", "Status: ", maestro.mbr_partcion[part].part_status);
+        printf("%s %s\n", "Name: ", maestro.mbr_partcion[part].part_name);
+        printf("%s %s\n", "Fit: ", maestro.mbr_partcion[part].part_fit);
+        printf("%s %d\n", "Start: ", maestro.mbr_partcion[part].part_start);
+        printf("%s %d\n", "Size: ", maestro.mbr_partcion[part].part_size);
+
+        part = part + 1;
+    }
 
     // while((maestro.Id_profesor = getchar()) != '\n' && maestro.Id_profesor != EOF);
     fread(&maestro, sizeof(MBR), 1, arch);
