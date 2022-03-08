@@ -5,11 +5,73 @@
 #include <string>
 #include <sstream>
 
+struct SuperBloque
+{
+    int s_filesystem_type;
+    int s_inodes_count;
+    int s_blocks_count;
+    int s_free_blocks_count;
+    int s_free_inodes_count;
+    time_t s_mtime;
+    time_t s_umtime;
+    int s_mnt_count;
+    int s_magic;
+    int s_inode_size;
+    int s_block_size;
+    int s_firts_ino;
+    int s_first_blo;
+    int s_bm_inode_start;
+    int s_bm_block_start;
+    int s_inode_start;
+    int s_block_start;
+};
+
+struct TablaInodos
+{
+    int i_uid;
+    int I_gid;
+    int i_size;
+    time_t i_atime;
+    time_t i_ctime;
+    time_t i_mtime;
+    int i_block;
+    char i_type[5];
+    int i_perm;
+};
+
+struct ContenidoCarpeta
+{
+    char b_name[12];
+    int b_inodo;
+};
+
+struct BloqueCarpeta
+{
+    ContenidoCarpeta b_content[4];
+};
+
+struct BloqueApuntadores
+{
+    int b_pointers[16];
+};
+
+struct BloqueArchivo
+{
+    char b_content[64];
+};
+
+struct Montado
+{
+    char Disco[100];
+    char id[10];
+    char name[16];
+};
+
 struct Particion
 {
-    char *part_status;
-    char *part_type;
-    char *part_fit;
+    char part_status[5];
+    char part_type[5];
+    char part_fit[5];
     int part_start;
     int part_size;
     char part_name[16];
@@ -17,8 +79,8 @@ struct Particion
 
 struct EBR
 {
-    char *part_status;
-    char *part_fit;
+    char part_status[5];
+    char part_fit[5];
     int part_start;
     int part_size;
     int part_next;
@@ -30,7 +92,7 @@ struct MBR
     int mbr_tamano;
     time_t mbr_fecha_creacion;
     int mbr_dsk_signature;
-    char *mbr_fit;
+    char mbr_fit[5];
     Particion mbr_partcion[4];
 };
 
@@ -101,6 +163,14 @@ void RMDISK(char *x)
         printf("ERROR: Utilice un comando existente y/o instruccion adecuada\n");
         printf(" \n");
     }
+}
+
+void MOUNT(char *x, char *y)
+{
+}
+
+void UNMOUNT(char *x)
+{
 }
 
 void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
@@ -1411,12 +1481,14 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         if (name[0] != master.mbr_partcion[0].part_name)
                                         {
-                                            master.mbr_partcion[0].part_type = type[0];
-                                            master.mbr_partcion[0].part_fit = fit[0];
-                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
-                                            master.mbr_partcion[0].part_start = ftell(arch1);
-                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+
                                             int pos = ftell(arch1) - sizeof(MBR);
+                                            strcpy(master.mbr_partcion[0].part_type, type[0]);
+                                            strcpy(master.mbr_partcion[0].part_fit, fit[0]);
+                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
+                                            master.mbr_partcion[0].part_start = pos;
+                                            strcpy(master.mbr_partcion[0].part_status, ru);
+                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
 
                                             fseek(arch1, pos, SEEK_SET);
                                             fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1468,12 +1540,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             if (name[0] != master.mbr_partcion[1].part_name)
                                             {
-                                                master.mbr_partcion[1].part_type = type[0];
-                                                master.mbr_partcion[1].part_fit = fit[0];
-                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
-                                                master.mbr_partcion[1].part_start = ftell(arch1);
-                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
                                                 int pos = ftell(arch1) - sizeof(MBR);
+                                                strcpy(master.mbr_partcion[1].part_type, type[0]);
+                                                strcpy(master.mbr_partcion[1].part_fit, fit[0]);
+                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
+                                                master.mbr_partcion[1].part_start = pos;
+                                                strcpy(master.mbr_partcion[1].part_status, ru);
+                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
 
                                                 fseek(arch1, pos, SEEK_SET);
                                                 fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1525,12 +1598,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 if (name[0] != master.mbr_partcion[2].part_name)
                                                 {
-                                                    master.mbr_partcion[2].part_type = type[0];
-                                                    master.mbr_partcion[2].part_fit = fit[0];
-                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
-                                                    master.mbr_partcion[2].part_start = ftell(arch1);
-                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
                                                     int pos = ftell(arch1) - sizeof(MBR);
+                                                    strcpy(master.mbr_partcion[2].part_type, type[0]);
+                                                    strcpy(master.mbr_partcion[2].part_fit, fit[0]);
+                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
+                                                    strcpy(master.mbr_partcion[2].part_status, ru);
+                                                    master.mbr_partcion[2].part_start = pos;
+                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
 
                                                     fseek(arch1, pos, SEEK_SET);
                                                     fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1581,12 +1655,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     if (name[0] != master.mbr_partcion[3].part_name)
                                                     {
-                                                        master.mbr_partcion[3].part_type = type[0];
-                                                        master.mbr_partcion[3].part_fit = fit[0];
-                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
-                                                        master.mbr_partcion[3].part_start = ftell(arch1);
-                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
                                                         int pos = ftell(arch1) - sizeof(MBR);
+                                                        strcpy(master.mbr_partcion[3].part_type, type[0]);
+                                                        strcpy(master.mbr_partcion[3].part_fit, fit[0]);
+                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
+                                                        master.mbr_partcion[3].part_start = pos;
+                                                        strcpy(master.mbr_partcion[3].part_status, ru);
+                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
 
                                                         fseek(arch1, pos, SEEK_SET);
                                                         fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1674,12 +1749,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         if (name[0] != master.mbr_partcion[0].part_name)
                                         {
-                                            master.mbr_partcion[0].part_type = type[0];
-                                            master.mbr_partcion[0].part_fit = fit[0];
-                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
-                                            master.mbr_partcion[0].part_start = ftell(arch1);
-                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10);
                                             int pos = ftell(arch1) - sizeof(MBR);
+                                            strcpy(master.mbr_partcion[0].part_type, type[0]);
+                                            strcpy(master.mbr_partcion[0].part_fit, fit[0]);
+                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
+                                            master.mbr_partcion[0].part_start = pos;
+                                            strcpy(master.mbr_partcion[0].part_status, ru);
+                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10);
 
                                             fseek(arch1, pos, SEEK_SET);
                                             fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1731,12 +1807,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             if (name[0] != master.mbr_partcion[1].part_name)
                                             {
-                                                master.mbr_partcion[1].part_type = type[0];
-                                                master.mbr_partcion[1].part_fit = fit[0];
-                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
-                                                master.mbr_partcion[1].part_start = ftell(arch1);
-                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10);
                                                 int pos = ftell(arch1) - sizeof(MBR);
+                                                strcpy(master.mbr_partcion[1].part_type, type[0]);
+                                                strcpy(master.mbr_partcion[1].part_fit, fit[0]);
+                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
+                                                master.mbr_partcion[1].part_start = pos;
+                                                strcpy(master.mbr_partcion[1].part_status, ru);
+                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10);
 
                                                 fseek(arch1, pos, SEEK_SET);
                                                 fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1788,12 +1865,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 if (name[0] != master.mbr_partcion[2].part_name)
                                                 {
-                                                    master.mbr_partcion[2].part_type = type[0];
-                                                    master.mbr_partcion[2].part_fit = fit[0];
-                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
-                                                    master.mbr_partcion[2].part_start = ftell(arch1);
-                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10);
                                                     int pos = ftell(arch1) - sizeof(MBR);
+                                                    strcpy(master.mbr_partcion[2].part_type, type[0]);
+                                                    strcpy(master.mbr_partcion[2].part_fit, fit[0]);
+                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
+                                                    master.mbr_partcion[2].part_start = pos;
+                                                    strcpy(master.mbr_partcion[2].part_status, ru);
+                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10);
 
                                                     fseek(arch1, pos, SEEK_SET);
                                                     fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1844,12 +1922,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     if (name[0] != master.mbr_partcion[3].part_name)
                                                     {
-                                                        master.mbr_partcion[3].part_type = type[0];
-                                                        master.mbr_partcion[3].part_fit = fit[0];
-                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
-                                                        master.mbr_partcion[3].part_start = ftell(arch1);
-                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10);
                                                         int pos = ftell(arch1) - sizeof(MBR);
+                                                        strcpy(master.mbr_partcion[3].part_type, type[0]);
+                                                        strcpy(master.mbr_partcion[3].part_fit, fit[0]);
+                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
+                                                        master.mbr_partcion[3].part_start = pos;
+                                                        strcpy(master.mbr_partcion[3].part_status, ru);
+                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10);
 
                                                         fseek(arch1, pos, SEEK_SET);
                                                         fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1937,12 +2016,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         if (name[0] != master.mbr_partcion[0].part_name)
                                         {
-                                            master.mbr_partcion[0].part_type = type[0];
-                                            master.mbr_partcion[0].part_fit = fit[0];
-                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
-                                            master.mbr_partcion[0].part_start = ftell(arch1);
-                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10) * 1024;
                                             int pos = ftell(arch1) - sizeof(MBR);
+                                            strcpy(master.mbr_partcion[0].part_type, type[0]);
+                                            strcpy(master.mbr_partcion[0].part_fit, fit[0]);
+                                            strcpy(master.mbr_partcion[0].part_name, name[0]);
+                                            master.mbr_partcion[0].part_start = pos;
+                                            strcpy(master.mbr_partcion[0].part_status, ru);
+                                            master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10) * 1024;
 
                                             fseek(arch1, pos, SEEK_SET);
                                             fwrite(&master, sizeof(MBR), 1, arch1);
@@ -1994,12 +2074,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             if (name[0] != master.mbr_partcion[1].part_name)
                                             {
-                                                master.mbr_partcion[1].part_type = type[0];
-                                                master.mbr_partcion[1].part_fit = fit[0];
-                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
-                                                master.mbr_partcion[1].part_start = ftell(arch1);
-                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10) * 1024;
                                                 int pos = ftell(arch1) - sizeof(MBR);
+                                                strcpy(master.mbr_partcion[1].part_type, type[0]);
+                                                strcpy(master.mbr_partcion[1].part_fit, fit[0]);
+                                                strcpy(master.mbr_partcion[1].part_name, name[0]);
+                                                master.mbr_partcion[1].part_start = pos;
+                                                strcpy(master.mbr_partcion[1].part_status, ru);
+                                                master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10) * 1024;
 
                                                 fseek(arch1, pos, SEEK_SET);
                                                 fwrite(&master, sizeof(MBR), 1, arch1);
@@ -2051,12 +2132,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 if (name[0] != master.mbr_partcion[2].part_name)
                                                 {
-                                                    master.mbr_partcion[2].part_type = type[0];
-                                                    master.mbr_partcion[2].part_fit = fit[0];
-                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
-                                                    master.mbr_partcion[2].part_start = ftell(arch1);
-                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10) * 1024;
                                                     int pos = ftell(arch1) - sizeof(MBR);
+                                                    strcpy(master.mbr_partcion[2].part_type, type[0]);
+                                                    strcpy(master.mbr_partcion[2].part_fit, fit[0]);
+                                                    strcpy(master.mbr_partcion[2].part_name, name[0]);
+                                                    master.mbr_partcion[2].part_start = pos;
+                                                    strcpy(master.mbr_partcion[2].part_status, ru);
+                                                    master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10) * 1024;
 
                                                     fseek(arch1, pos, SEEK_SET);
                                                     fwrite(&master, sizeof(MBR), 1, arch1);
@@ -2107,12 +2189,13 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     if (name[0] != master.mbr_partcion[3].part_name)
                                                     {
-                                                        master.mbr_partcion[3].part_type = type[0];
-                                                        master.mbr_partcion[3].part_fit = fit[0];
-                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
-                                                        master.mbr_partcion[3].part_start = ftell(arch1);
-                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10) * 1024;
                                                         int pos = ftell(arch1) - sizeof(MBR);
+                                                        strcpy(master.mbr_partcion[3].part_type, type[0]);
+                                                        strcpy(master.mbr_partcion[3].part_fit, fit[0]);
+                                                        strcpy(master.mbr_partcion[3].part_name, name[0]);
+                                                        master.mbr_partcion[3].part_start = pos;
+                                                        strcpy(master.mbr_partcion[3].part_status, ru);
+                                                        master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10) * 1024;
 
                                                         fseek(arch1, pos, SEEK_SET);
                                                         fwrite(&master, sizeof(MBR), 1, arch1);
@@ -2212,8 +2295,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         delet[0] = ru;
 
-                                        master.mbr_partcion[0].part_type = delet[0];
-                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
                                         strcpy(master.mbr_partcion[0].part_name, delet[0]);
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
@@ -2246,8 +2329,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             delet[0] = ru;
 
-                                            master.mbr_partcion[1].part_type = delet[0];
-                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
                                             strcpy(master.mbr_partcion[1].part_name, delet[0]);
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
@@ -2280,8 +2363,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 delet[0] = ru;
 
-                                                master.mbr_partcion[2].part_type = delet[0];
-                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
                                                 strcpy(master.mbr_partcion[2].part_name, delet[0]);
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
@@ -2314,8 +2397,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     delet[0] = ru;
 
-                                                    master.mbr_partcion[3].part_type = delet[0];
-                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
                                                     strcpy(master.mbr_partcion[3].part_name, delet[0]);
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
@@ -2387,8 +2470,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         delet[0] = ru;
 
-                                        master.mbr_partcion[0].part_type = delet[0];
-                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
                                         strcpy(master.mbr_partcion[0].part_name, delet[0]);
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
@@ -2421,8 +2504,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             delet[0] = ru;
 
-                                            master.mbr_partcion[1].part_type = delet[0];
-                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
                                             strcpy(master.mbr_partcion[1].part_name, delet[0]);
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
@@ -2455,8 +2538,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 delet[0] = ru;
 
-                                                master.mbr_partcion[2].part_type = delet[0];
-                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
                                                 strcpy(master.mbr_partcion[2].part_name, delet[0]);
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
@@ -2489,8 +2572,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     delet[0] = ru;
 
-                                                    master.mbr_partcion[3].part_type = delet[0];
-                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
                                                     strcpy(master.mbr_partcion[3].part_name, delet[0]);
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
@@ -2562,8 +2645,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         delet[0] = ru;
 
-                                        master.mbr_partcion[0].part_type = delet[0];
-                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
                                         strcpy(master.mbr_partcion[0].part_name, delet[0]);
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
@@ -2596,8 +2679,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             delet[0] = ru;
 
-                                            master.mbr_partcion[1].part_type = delet[0];
-                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
                                             strcpy(master.mbr_partcion[1].part_name, delet[0]);
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
@@ -2630,8 +2713,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 delet[0] = ru;
 
-                                                master.mbr_partcion[2].part_type = delet[0];
-                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
                                                 strcpy(master.mbr_partcion[2].part_name, delet[0]);
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
@@ -2664,8 +2747,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     delet[0] = ru;
 
-                                                    master.mbr_partcion[3].part_type = delet[0];
-                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
                                                     strcpy(master.mbr_partcion[3].part_name, delet[0]);
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
@@ -2749,8 +2832,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         delet[0] = ru1;
 
-                                        master.mbr_partcion[0].part_type = delet[0];
-                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
                                         strcpy(master.mbr_partcion[0].part_name, delet[0]);
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
@@ -2783,8 +2866,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             delet[0] = ru1;
 
-                                            master.mbr_partcion[1].part_type = delet[0];
-                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
                                             strcpy(master.mbr_partcion[1].part_name, delet[0]);
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
@@ -2817,8 +2900,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 delet[0] = ru1;
 
-                                                master.mbr_partcion[2].part_type = delet[0];
-                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
                                                 strcpy(master.mbr_partcion[2].part_name, delet[0]);
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
@@ -2851,8 +2934,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     delet[0] = ru1;
 
-                                                    master.mbr_partcion[3].part_type = delet[0];
-                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
                                                     strcpy(master.mbr_partcion[3].part_name, delet[0]);
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
@@ -2924,8 +3007,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         delet[0] = ru1;
 
-                                        master.mbr_partcion[0].part_type = delet[0];
-                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
                                         strcpy(master.mbr_partcion[0].part_name, delet[0]);
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
@@ -2958,8 +3041,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             delet[0] = ru1;
 
-                                            master.mbr_partcion[1].part_type = delet[0];
-                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
                                             strcpy(master.mbr_partcion[1].part_name, delet[0]);
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
@@ -2992,8 +3075,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 delet[0] = ru1;
 
-                                                master.mbr_partcion[2].part_type = delet[0];
-                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
                                                 strcpy(master.mbr_partcion[2].part_name, delet[0]);
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
@@ -3026,8 +3109,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     delet[0] = ru1;
 
-                                                    master.mbr_partcion[3].part_type = delet[0];
-                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
                                                     strcpy(master.mbr_partcion[3].part_name, delet[0]);
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
@@ -3099,8 +3182,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                         delet[0] = ru1;
 
-                                        master.mbr_partcion[0].part_type = delet[0];
-                                        master.mbr_partcion[0].part_fit = delet[0];
+                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
                                         strcpy(master.mbr_partcion[0].part_name, delet[0]);
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
@@ -3133,8 +3216,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                             delet[0] = ru1;
 
-                                            master.mbr_partcion[1].part_type = delet[0];
-                                            master.mbr_partcion[1].part_fit = delet[0];
+                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
                                             strcpy(master.mbr_partcion[1].part_name, delet[0]);
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
@@ -3167,8 +3250,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                 delet[0] = ru1;
 
-                                                master.mbr_partcion[2].part_type = delet[0];
-                                                master.mbr_partcion[2].part_fit = delet[0];
+                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
                                                 strcpy(master.mbr_partcion[2].part_name, delet[0]);
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
@@ -3201,8 +3284,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
                                                     delet[0] = ru1;
 
-                                                    master.mbr_partcion[3].part_type = delet[0];
-                                                    master.mbr_partcion[3].part_fit = delet[0];
+                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
                                                     strcpy(master.mbr_partcion[3].part_name, delet[0]);
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
@@ -3248,7 +3331,6 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                 printf("ERROR/Advertencia: valor inexistente u variable nula\n");
                                 printf(" \n");
                             }
-                        
                         }
                     }
                     else
@@ -3316,6 +3398,8 @@ void MKDISK(char *x, char *y, char *z, char *v)
     char *fit[100];
 
     char *cero[100];
+
+    char *sino[100];
 
     // fit[0] = "FF";
     // unit[0] = "m";
@@ -3805,13 +3889,13 @@ void MKDISK(char *x, char *y, char *z, char *v)
                 master.mbr_tamano = strtol(size[0], NULL, 10) * 1024 * 1024;
                 master.mbr_fecha_creacion = t;
                 master.mbr_dsk_signature = rand() % 500;
-                master.mbr_fit = fit[0];
+                strcpy(master.mbr_fit, fit[0]);
 
                 while (part <= 3)
                 {
-                    master.mbr_partcion[part].part_status = cero[0];
-                    master.mbr_partcion[part].part_type = cero[0];
-                    master.mbr_partcion[part].part_fit = cero[0];
+                    strcpy(master.mbr_partcion[part].part_status, cero[0]);
+                    strcpy(master.mbr_partcion[part].part_type, cero[0]);
+                    strcpy(master.mbr_partcion[part].part_fit, cero[0]);
                     master.mbr_partcion[part].part_start = -1;
                     master.mbr_partcion[part].part_size = 0;
                     strcpy(master.mbr_partcion[part].part_name, "");
@@ -3859,13 +3943,13 @@ void MKDISK(char *x, char *y, char *z, char *v)
                 master.mbr_tamano = strtol(size[0], NULL, 10) * 1024;
                 master.mbr_fecha_creacion = t;
                 master.mbr_dsk_signature = rand() % 500;
-                master.mbr_fit = fit[0];
+                strcpy(master.mbr_fit, fit[0]);
 
                 while (part <= 3)
                 {
-                    master.mbr_partcion[part].part_status = cero[0];
-                    master.mbr_partcion[part].part_type = cero[0];
-                    master.mbr_partcion[part].part_fit = cero[0];
+                    strcpy(master.mbr_partcion[part].part_status, cero[0]);
+                    strcpy(master.mbr_partcion[part].part_type, cero[0]);
+                    strcpy(master.mbr_partcion[part].part_fit, cero[0]);
                     master.mbr_partcion[part].part_start = -1;
                     master.mbr_partcion[part].part_size = 0;
                     strcpy(master.mbr_partcion[part].part_name, "");
@@ -4146,6 +4230,63 @@ void EXEC(char *x)
                             cont = 0;
                             mknum[0] = NULL;
                         }
+                        else if (strcmp(opcion, "mount") == 0)
+                        {
+                            printf("EJECUTANDO: Comando mount \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "mount") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            MOUNT(mknum[0], mknum[1]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                        }
+                        else if (strcmp(opcion, "unmount") == 0)
+                        {
+                            printf("EJECUTANDO: Comando unmount \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "unmount") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            UNMOUNT(mknum[0]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                        }
 
                         else if (strcmp(opcion, "rep\n") == 0)
                         {
@@ -4328,6 +4469,54 @@ int main()
             mknum[4] = NULL;
             mknum[5] = NULL;
             mknum[6] = NULL;
+        }
+        else if (strcmp(split, "mount") == 0)
+        {
+            printf("EJECUTANDO: Comando mount \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "mount") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            MOUNT(mknum[0], mknum[1]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+        }
+        else if (strcmp(split, "unmount") == 0)
+        {
+            printf("EJECUTANDO: Comando UNMOUNT \n");
+            // printf("ADVERTENCIA: la dreccion del archivo NO debe tener espacios; Se mostrara ERROR \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "unmount") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    printf(" %s\n", split); // printing each token
+                    UNMOUNT(split);
+                    // split = strtok(NULL, " ");
+                    break;
+                }
+            }
         }
         else
         {
