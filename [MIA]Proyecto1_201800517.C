@@ -60,6 +60,14 @@ struct BloqueArchivo
     char b_content[64];
 };
 
+struct Datos
+{
+    char Disco[100];
+    char name[16];
+    char letra[10];
+    int numero;
+};
+
 struct Montado
 {
     char Disco[100];
@@ -95,6 +103,10 @@ struct MBR
     char mbr_fit[5];
     Particion mbr_partcion[4];
 };
+
+int variablecuenta = 0;
+
+Montado montar[100];
 
 void RMDISK(char *x)
 {
@@ -167,10 +179,620 @@ void RMDISK(char *x)
 
 void MOUNT(char *x, char *y)
 {
+    printf("%s %s %s\n", "Esta prueba es de mkdisk split:", x, y);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char *path[100];
+    char *name[100];
+
+    // char *cero[100];
+
+    // char *sino[100];
+
+    // printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-name") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    name[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    path[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-name") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    name[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d\n", "Prueba de parametros:", a, s);
+
+    path[0][strcspn(path[0], "\n")] = 0;
+    name[0][strcspn(name[0], "\n")] = 0;
+
+    FILE *arch1;
+    arch1 = fopen(path[0], "r+b");
+    if (arch1 == NULL)
+        exit(1);
+
+    MBR master;
+    int cont = 0;
+    int existe = 1;
+    printf(" Actualizando Archivo....\n");
+
+    time_t t;
+
+    t = time(NULL);
+
+    fread(&master, sizeof(MBR), 1, arch1);
+
+    while (!feof(arch1))
+    {
+        if (name[0] == master.mbr_partcion[0].part_name)
+        {
+            int pos = ftell(arch1) - sizeof(MBR);
+            strcpy(master.mbr_partcion[0].part_status, "1");
+
+            fseek(arch1, pos, SEEK_SET);
+            fwrite(&master, sizeof(MBR), 1, arch1);
+            printf("Se modifico los datos de la particion.\n");
+            printf("PARTICION ACTIVADA.........\n");
+            existe = 1;
+
+            printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+            printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+            printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+            printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+            printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+            printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+            // Montado montar;
+
+            char diccionario[] = {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+                'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                'w', 'x', 'y', 'z',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                'W', 'X', 'Y', 'Z'};
+
+            char diccionario1[11];
+
+            char car[] = "17";
+
+            char jj = diccionario1[rand() % 11];
+
+            char ID[100];
+
+            sprintf(diccionario1, "%d", rand() % 11);
+
+            strcat(strcpy(ID, car), diccionario1);
+
+            char cadena[2];
+            char caracter = diccionario[rand() % 53];
+            cadena[0] = caracter;
+            cadena[1] = '\0';
+
+            strcat(ID, cadena);
+
+            strcpy(montar[variablecuenta].Disco, path[0]);
+            strcpy(montar[variablecuenta].name, name[0]);
+            strcpy(montar[variablecuenta].id, ID);
+
+            variablecuenta = variablecuenta + 1;
+
+            break;
+        }
+        else
+        {
+            if (name[0] == master.mbr_partcion[1].part_name)
+            {
+                int pos = ftell(arch1) - sizeof(MBR);
+                strcpy(master.mbr_partcion[1].part_status, "1");
+
+                fseek(arch1, pos, SEEK_SET);
+                fwrite(&master, sizeof(MBR), 1, arch1);
+                printf("Se modifico los datos de la particion.\n");
+                printf("PARTICION ACTIVADA.........\n");
+                existe = 1;
+
+                printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                // Montado montar;
+
+                char diccionario[] = {
+                    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+                    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                    'w', 'x', 'y', 'z',
+                    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                    'W', 'X', 'Y', 'Z'};
+
+                char diccionario1[11];
+
+                char car[] = "17";
+
+                char jj = diccionario1[rand() % 11];
+
+                char ID[100];
+
+                sprintf(diccionario1, "%d", rand() % 11);
+
+                strcat(strcpy(ID, car), diccionario1);
+
+                char cadena[2];
+                char caracter = diccionario[rand() % 53];
+                cadena[0] = caracter;
+                cadena[1] = '\0';
+
+                strcat(ID, cadena);
+
+                strcpy(montar[variablecuenta].Disco, path[0]);
+                strcpy(montar[variablecuenta].name, name[0]);
+                strcpy(montar[variablecuenta].id, ID);
+
+                variablecuenta = variablecuenta + 1;
+
+                break;
+            }
+            else
+            {
+                if (name[0] == master.mbr_partcion[2].part_name)
+                {
+                    int pos = ftell(arch1) - sizeof(MBR);
+                    strcpy(master.mbr_partcion[2].part_status, "1");
+
+                    fseek(arch1, pos, SEEK_SET);
+                    fwrite(&master, sizeof(MBR), 1, arch1);
+                    printf("Se modifico los datos de la particion.\n");
+                    printf("PARTICION ACTIVADA.........\n");
+                    existe = 1;
+
+                    printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                    printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                    printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                    printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                    printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                    printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                    // Montado montar;
+
+                    char diccionario[] = {
+                        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+                        'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                        'w', 'x', 'y', 'z',
+                        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                        'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                        'W', 'X', 'Y', 'Z'};
+
+                    char diccionario1[11];
+
+                    char car[] = "17";
+
+                    char jj = diccionario1[rand() % 11];
+
+                    char ID[100];
+
+                    sprintf(diccionario1, "%d", rand() % 11);
+
+                    strcat(strcpy(ID, car), diccionario1);
+
+                    char cadena[2];
+                    char caracter = diccionario[rand() % 53];
+                    cadena[0] = caracter;
+                    cadena[1] = '\0';
+
+                    strcat(ID, cadena);
+
+                    strcpy(montar[variablecuenta].Disco, path[0]);
+                    strcpy(montar[variablecuenta].name, name[0]);
+                    strcpy(montar[variablecuenta].id, ID);
+
+                    variablecuenta = variablecuenta + 1;
+
+                    break;
+                }
+                else
+                {
+                    if (name[0] == master.mbr_partcion[3].part_name)
+                    {
+                        int pos = ftell(arch1) - sizeof(MBR);
+                        strcpy(master.mbr_partcion[3].part_status, "1");
+
+                        fseek(arch1, pos, SEEK_SET);
+                        fwrite(&master, sizeof(MBR), 1, arch1);
+                        printf("Se modifico los datos de la particion.\n");
+                        printf("PARTICION ACTIVADA.........\n");
+                        existe = 1;
+
+                        printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                        printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                        printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                        printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                        printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                        printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                        // Montado montar;
+
+                        char diccionario[] = {
+                            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+                            'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                            'w', 'x', 'y', 'z',
+                            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                            'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                            'W', 'X', 'Y', 'Z'};
+
+                        char diccionario1[11];
+
+                        char car[] = "17";
+
+                        char jj = diccionario1[rand() % 11];
+
+                        char ID[100];
+
+                        sprintf(diccionario1, "%d", rand() % 11);
+
+                        strcat(strcpy(ID, car), diccionario1);
+
+                        char cadena[2];
+                        char caracter = diccionario[rand() % 53];
+                        cadena[0] = caracter;
+                        cadena[1] = '\0';
+
+                        strcat(ID, cadena);
+
+                        strcpy(montar[variablecuenta].Disco, path[0]);
+                        strcpy(montar[variablecuenta].name, name[0]);
+                        strcpy(montar[variablecuenta].id, ID);
+
+                        variablecuenta = variablecuenta + 1;
+
+                        break;
+                    }
+                    else
+                    {
+                        printf("NO HAY MAS PARTICIONES\n");
+                        printf(" \n");
+                        printf("ERROR/Advertencia: NO SE PUEDE ENCONTRAR LA PARTCION\n");
+                        printf(" \n");
+                        break;
+                    }
+                }
+            }
+        }
+
+        fread(&master, sizeof(MBR), 1, arch1);
+    }
+
+    fclose(arch1);
 }
 
 void UNMOUNT(char *x)
 {
+    printf("%s %s\n", "Esta prueba es de mkdisk split:", x);
+    char igual[] = "=";
+
+    int a = 0;
+
+    int part = 0;
+
+    char *id[100];
+
+    // char *cero[100];
+
+    // char *sino[100];
+
+    // printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-id") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    id[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    id[0][strcspn(id[0], "\n")] = 0;
+
+    for (int ss = 0; ss < variablecuenta; ss++)
+    {
+
+        if (id[0] == montar[variablecuenta].id)
+        {
+
+            FILE *arch1;
+            arch1 = fopen(montar[variablecuenta].Disco, "r+b");
+            if (arch1 == NULL)
+                exit(1);
+
+            MBR master;
+            int cont = 0;
+            int existe = 1;
+            printf(" Actualizando Archivo....\n");
+
+            time_t t;
+
+            t = time(NULL);
+
+            fread(&master, sizeof(MBR), 1, arch1);
+
+            while (!feof(arch1))
+            {
+                if (montar[variablecuenta].name == master.mbr_partcion[0].part_name)
+                {
+                    int pos = ftell(arch1) - sizeof(MBR);
+                    strcpy(master.mbr_partcion[0].part_status, "0");
+
+                    fseek(arch1, pos, SEEK_SET);
+                    fwrite(&master, sizeof(MBR), 1, arch1);
+                    printf("Se modifico los datos de la particion.\n");
+                    printf("PARTICION DESACTIVADA.........\n");
+                    existe = 1;
+
+                    printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                    printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                    printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                    printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                    printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                    printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                    // Montado montar;
+
+                    strcpy(montar[variablecuenta].Disco, "\0");
+                    strcpy(montar[variablecuenta].name, "\0");
+                    strcpy(montar[variablecuenta].id, "\0");
+
+                    break;
+                }
+                else
+                {
+                    if (montar[variablecuenta].name == master.mbr_partcion[1].part_name)
+                    {
+                        int pos = ftell(arch1) - sizeof(MBR);
+                        strcpy(master.mbr_partcion[1].part_status, "0");
+
+                        fseek(arch1, pos, SEEK_SET);
+                        fwrite(&master, sizeof(MBR), 1, arch1);
+                        printf("Se modifico los datos de la particion.\n");
+                        printf("PARTICION DESACTIVADA.........\n");
+                        existe = 1;
+
+                        printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                        printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                        printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                        printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                        printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                        printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                        // Montado montar;
+
+                        strcpy(montar[variablecuenta].Disco, "\0");
+                        strcpy(montar[variablecuenta].name, "\0");
+                        strcpy(montar[variablecuenta].id, "\0");
+
+                        break;
+                    }
+                    else
+                    {
+                        if (montar[variablecuenta].name == master.mbr_partcion[2].part_name)
+                        {
+                            int pos = ftell(arch1) - sizeof(MBR);
+                            strcpy(master.mbr_partcion[2].part_status, "0");
+
+                            fseek(arch1, pos, SEEK_SET);
+                            fwrite(&master, sizeof(MBR), 1, arch1);
+                            printf("Se modifico los datos de la particion.\n");
+                            printf("PARTICION DESACTIVADA.........\n");
+                            existe = 1;
+
+                            printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                            printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                            printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                            printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                            printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                            printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                            // Montado montar;
+
+                            strcpy(montar[variablecuenta].Disco, "\0");
+                            strcpy(montar[variablecuenta].name, "\0");
+                            strcpy(montar[variablecuenta].id, "\0");
+
+                            break;
+                        }
+                        else
+                        {
+                            if (montar[variablecuenta].name == master.mbr_partcion[3].part_name)
+                            {
+                                int pos = ftell(arch1) - sizeof(MBR);
+                                strcpy(master.mbr_partcion[3].part_status, "0");
+
+                                fseek(arch1, pos, SEEK_SET);
+                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                printf("Se modifico los datos de la particion.\n");
+                                printf("PARTICION DESACTIVADA.........\n");
+                                existe = 1;
+
+                                printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                // Montado montar;
+
+                                strcpy(montar[variablecuenta].Disco, "\0");
+                                strcpy(montar[variablecuenta].name, "\0");
+                                strcpy(montar[variablecuenta].id, "\0");
+
+                                break;
+                            }
+                            else
+                            {
+                                printf("NO HAY MAS PARTICIONES\n");
+                                printf(" \n");
+                                printf("ERROR/Advertencia: NO SE PUEDE ENCONTRAR LA PARTCION\n");
+                                printf(" \n");
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                fread(&master, sizeof(MBR), 1, arch1);
+            }
+
+            fclose(arch1);
+        }
+        else
+        {
+            printf(" \n");
+            printf("Buscando las particiones....\n");
+            printf("Analizando las particiones....\n");
+            printf(" \n");
+        }
+    }
 }
 
 void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
@@ -1434,6 +2056,7 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                 printf("Print Encontrado\n");
             }
 
+            path[0][strcspn(path[0], "\n")] = 0;
             fit[0][strcspn(fit[0], "\n")] = 0;
 
             if ((strcmp(fit[0], "B") == 0) || (strcmp(fit[0], "F") == 0) || (strcmp(fit[0], "W") == 0) || (strcmp(fit[0], "BF") == 0) || (strcmp(fit[0], "FF") == 0) || (strcmp(fit[0], "WF") == 0))
