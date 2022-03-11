@@ -104,9 +104,406 @@ struct MBR
     Particion mbr_partcion[4];
 };
 
+struct Usuario
+{
+
+    int UID;
+    char Tipo[10];
+    char Grupo[10];
+    char Usuario[10];
+    char Contrasenia[10];
+};
+
+struct Grupo
+{
+    int GID;
+    char Tipo[10];
+    char Grupo[10];
+};
+
+struct EXT2{
+    SuperBloque Super_Bloque;
+    int Bitmap_Inodos;
+    int Bitmap_Bloques;
+    TablaInodos Inodos;
+    BloqueCarpeta Bloque_Carpeta;
+    BloqueArchivo Bloque_Archivo;
+    BloqueApuntadores Bloque_Apuntatadores;
+};
+
+struct EXT3{
+    SuperBloque Super_Bloque;
+    int Journaling;
+    int Bitmap_Inodos;
+    int Bitmap_Bloques;
+    TablaInodos Inodos;
+    BloqueCarpeta Bloque_Carpeta;
+    BloqueArchivo Bloque_Archivo;
+    BloqueApuntadores Bloque_Apuntadores;
+
+};
+
+
 int variablecuenta = 0;
 
 Montado montar[100];
+
+bool login = false;
+
+char ID_UTILIZADO[10];
+
+char User_Actual[10];
+
+void LOGOUT()
+{
+
+    if (login == true)
+    {
+        login = false;
+        strcpy(ID_UTILIZADO, "\0");
+        strcpy(User_Actual, "\0");
+
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: No hay sesion iniciada....\n");
+        printf("RECOMENDACION: Se debe iniciar sesion primero antes de poder cerrarla....\n");
+        printf(" \n");
+    }
+}
+
+void LOGIN(char *x, char *y, char *z)
+{
+    printf("%s %s %s %s\n", "Esta prueba es de login split:", x, y, z);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int u = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char *id[100];
+    char *usuario[100];
+    char *password[100];
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-id") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    id[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-usuario") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    usuario[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-password") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion password... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-password") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    password[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-id") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    id[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-usuario") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    usuario[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-password") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion password... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-password") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    password[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *separar = strtok(z, igual);
+    printf(" %s\n", separar);
+
+    while (separar != NULL)
+    {
+        if (strcmp(separar, "-id") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s", separar);
+                }
+                else
+                {
+                    printf(" %s", separar);
+                    id[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-usuario") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    usuario[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-password") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion password... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-password") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    password[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    if (a == 1 && s == 1 && u == 1)
+    {
+        if (login == false)
+        {
+
+            FILE *arch1;
+            arch1 = fopen("users.txt", "rb");
+            if (arch1 == NULL)
+                exit(1);
+
+            Usuario user;
+            int cont = 0;
+            int existe = 1;
+            printf(" Leyendo Archivo users.txt....\n");
+
+            time_t t;
+
+            t = time(NULL);
+
+            fread(&user, sizeof(Usuario), 1, arch1);
+
+            while (!feof(arch1))
+            {
+
+                if (user.Usuario == usuario[0] && user.Contrasenia == password[0])
+                {
+                    strcpy(ID_UTILIZADO, id[0]);
+                    strcpy(User_Actual, usuario[0]);
+                    login = true;
+                    existe = 0;
+
+                    break;
+                }
+                else
+                {
+                    printf(" \n");
+                    printf("Buscando Datos.....\n");
+                    printf(" \n");
+                }
+
+                fread(&user, sizeof(Usuario), 1, arch1);
+            }
+            if (existe == 1)
+            {
+                printf(" \n");
+                printf("Datos no coinciden.....\n");
+                printf("Reformular sus parametros.....\n");
+                printf(" \n");
+            }
+
+            fclose(arch1);
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR: Sesion iniciada con anterioridad....\n");
+            printf("RECOMENDACION: Cerrar sesion primero antes de volver a iniciar....\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
 
 void RMDISK(char *x)
 {
@@ -173,6 +570,356 @@ void RMDISK(char *x)
     {
         printf(" \n");
         printf("ERROR: Utilice un comando existente y/o instruccion adecuada\n");
+        printf(" \n");
+    }
+}
+
+void MKFS(char *x, char *y, char *z)
+{
+
+    printf("%s %s %s %s\n", "Esta prueba es de mkfs split:", x, y, z);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int u = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char dd[5] = "2fs";
+    char d1[5] = "Full";
+
+    char *id[100];
+    char *type[100];
+    char *fs[100];
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-id") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    id[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-type") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    type[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-fs") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion fs... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-fs") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    fs[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-id") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    id[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-type") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    type[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-fs") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion fs... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-fs") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    fs[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *separar = strtok(z, igual);
+    printf(" %s\n", separar);
+
+    while (separar != NULL)
+    {
+        if (strcmp(separar, "-id") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s", separar);
+                }
+                else
+                {
+                    printf(" %s", separar);
+                    id[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-type") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion type... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-type") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    type[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-fs") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion fs... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-fs") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    fs[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    if (a == 1 && (s == 1 || s == 0) && (u == 1 || u == 0))
+    {
+
+        id[0][strcspn(id[0], "\n")] = 0;
+        type[0][strcspn(type[0], "\n")] = 0;
+        fs[0][strcspn(fs[0], "\n")] = 0;
+
+        if (u == 0)
+        {
+            printf("Valor Fit establecido automaticamente\n");
+            fs[0] = dd;
+        }
+        else
+        {
+            printf("Print Encontrado\n");
+        }
+        if (s == 0)
+        {
+            printf("Valor Unit establecido automaticamente\n");
+            type[0] = d1;
+        }
+        else
+        {
+            printf("Print Encontrado\n");
+        }
+
+        printf(" \n");
+        FILE *arch;
+        // char nombre;
+        printf("%s %s\n", "Esta es la direccion PATH:", "users.txt");
+
+        arch = fopen("users.txt", "wb");
+
+        if (arch == NULL)
+            exit(1);
+        fclose(arch);
+
+        printf("Creando archivo users.txt.......\n");
+        FILE *arch1;
+        arch1 = fopen("users.txt", "ab");
+        if (arch1 == NULL)
+            exit(1);
+
+        Usuario user;
+        Grupo group;
+        int cont = 0;
+        printf(" Creando Archivo....\n");
+
+        time_t t;
+
+        t = time(NULL);
+
+        group.GID = 1;
+        strcpy(group.Tipo, "G");
+        strcpy(group.Grupo, "root");
+
+        // int byte = sizeof(Usuario) + sizeof(Grupo);
+
+        fwrite(&group, sizeof(Grupo), 1, arch1);
+
+        user.UID = 1;
+        strcpy(user.Tipo, "U");
+        strcpy(user.Grupo, "root");
+        strcpy(user.Usuario, "root");
+        stpcpy(user.Contrasenia, "123");
+
+        fwrite(&user, sizeof(Usuario), 1, arch1);
+
+        fclose(arch1);
+        printf(" \n");
+        printf("Creacion de Archivo Users.txt Terminada\n");
+
+        printf(" \n");
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
         printf(" \n");
     }
 }
@@ -317,85 +1064,30 @@ void MOUNT(char *x, char *y)
     path[0][strcspn(path[0], "\n")] = 0;
     name[0][strcspn(name[0], "\n")] = 0;
 
-    FILE *arch1;
-    arch1 = fopen(path[0], "r+b");
-    if (arch1 == NULL)
-        exit(1);
-
-    MBR master;
-    int cont = 0;
-    int existe = 1;
-    printf(" Actualizando Archivo....\n");
-
-    time_t t;
-
-    t = time(NULL);
-
-    fread(&master, sizeof(MBR), 1, arch1);
-
-    while (!feof(arch1))
+    if (a == 1 && s == 1)
     {
-        if (name[0] == master.mbr_partcion[0].part_name)
+        FILE *arch1;
+        arch1 = fopen(path[0], "r+b");
+        if (arch1 == NULL)
+            exit(1);
+
+        MBR master;
+        int cont = 0;
+        int existe = 1;
+        printf(" Actualizando Archivo....\n");
+
+        time_t t;
+
+        t = time(NULL);
+
+        fread(&master, sizeof(MBR), 1, arch1);
+
+        while (!feof(arch1))
         {
-            int pos = ftell(arch1) - sizeof(MBR);
-            strcpy(master.mbr_partcion[0].part_status, "1");
-
-            fseek(arch1, pos, SEEK_SET);
-            fwrite(&master, sizeof(MBR), 1, arch1);
-            printf("Se modifico los datos de la particion.\n");
-            printf("PARTICION ACTIVADA.........\n");
-            existe = 1;
-
-            printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
-            printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
-            printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
-            printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
-            printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
-            printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
-
-            // Montado montar;
-
-            char diccionario[] = {
-                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-                'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-                'w', 'x', 'y', 'z',
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-                'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-                'W', 'X', 'Y', 'Z'};
-
-            char diccionario1[11];
-
-            char car[] = "17";
-
-            char jj = diccionario1[rand() % 11];
-
-            char ID[100];
-
-            sprintf(diccionario1, "%d", rand() % 11);
-
-            strcat(strcpy(ID, car), diccionario1);
-
-            char cadena[2];
-            char caracter = diccionario[rand() % 53];
-            cadena[0] = caracter;
-            cadena[1] = '\0';
-
-            strcat(ID, cadena);
-
-            strcpy(montar[variablecuenta].Disco, path[0]);
-            strcpy(montar[variablecuenta].name, name[0]);
-            strcpy(montar[variablecuenta].id, ID);
-
-            variablecuenta = variablecuenta + 1;
-
-            break;
-        }
-        else
-        {
-            if (name[0] == master.mbr_partcion[1].part_name)
+            if (name[0] == master.mbr_partcion[0].part_name)
             {
                 int pos = ftell(arch1) - sizeof(MBR);
-                strcpy(master.mbr_partcion[1].part_status, "1");
+                strcpy(master.mbr_partcion[0].part_status, "1");
 
                 fseek(arch1, pos, SEEK_SET);
                 fwrite(&master, sizeof(MBR), 1, arch1);
@@ -403,12 +1095,12 @@ void MOUNT(char *x, char *y)
                 printf("PARTICION ACTIVADA.........\n");
                 existe = 1;
 
-                printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
-                printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
-                printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
-                printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
-                printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
-                printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+                printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
 
                 // Montado montar;
 
@@ -449,10 +1141,10 @@ void MOUNT(char *x, char *y)
             }
             else
             {
-                if (name[0] == master.mbr_partcion[2].part_name)
+                if (name[0] == master.mbr_partcion[1].part_name)
                 {
                     int pos = ftell(arch1) - sizeof(MBR);
-                    strcpy(master.mbr_partcion[2].part_status, "1");
+                    strcpy(master.mbr_partcion[1].part_status, "1");
 
                     fseek(arch1, pos, SEEK_SET);
                     fwrite(&master, sizeof(MBR), 1, arch1);
@@ -460,12 +1152,12 @@ void MOUNT(char *x, char *y)
                     printf("PARTICION ACTIVADA.........\n");
                     existe = 1;
 
-                    printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
-                    printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
-                    printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
-                    printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
-                    printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
-                    printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+                    printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                    printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                    printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                    printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                    printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                    printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
 
                     // Montado montar;
 
@@ -506,10 +1198,10 @@ void MOUNT(char *x, char *y)
                 }
                 else
                 {
-                    if (name[0] == master.mbr_partcion[3].part_name)
+                    if (name[0] == master.mbr_partcion[2].part_name)
                     {
                         int pos = ftell(arch1) - sizeof(MBR);
-                        strcpy(master.mbr_partcion[3].part_status, "1");
+                        strcpy(master.mbr_partcion[2].part_status, "1");
 
                         fseek(arch1, pos, SEEK_SET);
                         fwrite(&master, sizeof(MBR), 1, arch1);
@@ -517,12 +1209,12 @@ void MOUNT(char *x, char *y)
                         printf("PARTICION ACTIVADA.........\n");
                         existe = 1;
 
-                        printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
-                        printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
-                        printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
-                        printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
-                        printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
-                        printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+                        printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                        printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                        printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                        printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                        printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                        printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
 
                         // Montado montar;
 
@@ -563,20 +1255,84 @@ void MOUNT(char *x, char *y)
                     }
                     else
                     {
-                        printf("NO HAY MAS PARTICIONES\n");
-                        printf(" \n");
-                        printf("ERROR/Advertencia: NO SE PUEDE ENCONTRAR LA PARTCION\n");
-                        printf(" \n");
-                        break;
+                        if (name[0] == master.mbr_partcion[3].part_name)
+                        {
+                            int pos = ftell(arch1) - sizeof(MBR);
+                            strcpy(master.mbr_partcion[3].part_status, "1");
+
+                            fseek(arch1, pos, SEEK_SET);
+                            fwrite(&master, sizeof(MBR), 1, arch1);
+                            printf("Se modifico los datos de la particion.\n");
+                            printf("PARTICION ACTIVADA.........\n");
+                            existe = 1;
+
+                            printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                            printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                            printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                            printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                            printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                            printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                            // Montado montar;
+
+                            char diccionario[] = {
+                                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+                                'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                                'w', 'x', 'y', 'z',
+                                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                                'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                                'W', 'X', 'Y', 'Z'};
+
+                            char diccionario1[11];
+
+                            char car[] = "17";
+
+                            char jj = diccionario1[rand() % 11];
+
+                            char ID[100];
+
+                            sprintf(diccionario1, "%d", rand() % 11);
+
+                            strcat(strcpy(ID, car), diccionario1);
+
+                            char cadena[2];
+                            char caracter = diccionario[rand() % 53];
+                            cadena[0] = caracter;
+                            cadena[1] = '\0';
+
+                            strcat(ID, cadena);
+
+                            strcpy(montar[variablecuenta].Disco, path[0]);
+                            strcpy(montar[variablecuenta].name, name[0]);
+                            strcpy(montar[variablecuenta].id, ID);
+
+                            variablecuenta = variablecuenta + 1;
+
+                            break;
+                        }
+                        else
+                        {
+                            printf("NO HAY MAS PARTICIONES\n");
+                            printf(" \n");
+                            printf("ERROR/Advertencia: NO SE PUEDE ENCONTRAR LA PARTCION\n");
+                            printf(" \n");
+                            break;
+                        }
                     }
                 }
             }
+
+            fread(&master, sizeof(MBR), 1, arch1);
         }
 
-        fread(&master, sizeof(MBR), 1, arch1);
+        fclose(arch1);
     }
-
-    fclose(arch1);
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
 }
 
 void UNMOUNT(char *x)
@@ -633,6 +1389,175 @@ void UNMOUNT(char *x)
     }
 
     id[0][strcspn(id[0], "\n")] = 0;
+
+    if (a == 1)
+    {
+        for (int ss = 0; ss < variablecuenta; ss++)
+        {
+
+            if (id[0] == montar[variablecuenta].id)
+            {
+
+                FILE *arch1;
+                arch1 = fopen(montar[variablecuenta].Disco, "r+b");
+                if (arch1 == NULL)
+                    exit(1);
+
+                MBR master;
+                int cont = 0;
+                int existe = 1;
+                printf(" Actualizando Archivo....\n");
+
+                time_t t;
+
+                t = time(NULL);
+
+                fread(&master, sizeof(MBR), 1, arch1);
+
+                while (!feof(arch1))
+                {
+                    if (montar[variablecuenta].name == master.mbr_partcion[0].part_name)
+                    {
+                        int pos = ftell(arch1) - sizeof(MBR);
+                        strcpy(master.mbr_partcion[0].part_status, "0");
+
+                        fseek(arch1, pos, SEEK_SET);
+                        fwrite(&master, sizeof(MBR), 1, arch1);
+                        printf("Se modifico los datos de la particion.\n");
+                        printf("PARTICION DESACTIVADA.........\n");
+                        existe = 1;
+
+                        printf("%s %s\n", "Type: ", master.mbr_partcion[0].part_type);
+                        printf("%s %s\n", "Status: ", master.mbr_partcion[0].part_status);
+                        printf("%s %s\n", "Name: ", master.mbr_partcion[0].part_name);
+                        printf("%s %s\n", "Fit: ", master.mbr_partcion[0].part_fit);
+                        printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
+                        printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
+
+                        // Montado montar;
+
+                        strcpy(montar[variablecuenta].Disco, "\0");
+                        strcpy(montar[variablecuenta].name, "\0");
+                        strcpy(montar[variablecuenta].id, "\0");
+
+                        break;
+                    }
+                    else
+                    {
+                        if (montar[variablecuenta].name == master.mbr_partcion[1].part_name)
+                        {
+                            int pos = ftell(arch1) - sizeof(MBR);
+                            strcpy(master.mbr_partcion[1].part_status, "0");
+
+                            fseek(arch1, pos, SEEK_SET);
+                            fwrite(&master, sizeof(MBR), 1, arch1);
+                            printf("Se modifico los datos de la particion.\n");
+                            printf("PARTICION DESACTIVADA.........\n");
+                            existe = 1;
+
+                            printf("%s %s\n", "Type: ", master.mbr_partcion[1].part_type);
+                            printf("%s %s\n", "Status: ", master.mbr_partcion[1].part_status);
+                            printf("%s %s\n", "Name: ", master.mbr_partcion[1].part_name);
+                            printf("%s %s\n", "Fit: ", master.mbr_partcion[1].part_fit);
+                            printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
+                            printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
+
+                            // Montado montar;
+
+                            strcpy(montar[variablecuenta].Disco, "\0");
+                            strcpy(montar[variablecuenta].name, "\0");
+                            strcpy(montar[variablecuenta].id, "\0");
+
+                            break;
+                        }
+                        else
+                        {
+                            if (montar[variablecuenta].name == master.mbr_partcion[2].part_name)
+                            {
+                                int pos = ftell(arch1) - sizeof(MBR);
+                                strcpy(master.mbr_partcion[2].part_status, "0");
+
+                                fseek(arch1, pos, SEEK_SET);
+                                fwrite(&master, sizeof(MBR), 1, arch1);
+                                printf("Se modifico los datos de la particion.\n");
+                                printf("PARTICION DESACTIVADA.........\n");
+                                existe = 1;
+
+                                printf("%s %s\n", "Type: ", master.mbr_partcion[2].part_type);
+                                printf("%s %s\n", "Status: ", master.mbr_partcion[2].part_status);
+                                printf("%s %s\n", "Name: ", master.mbr_partcion[2].part_name);
+                                printf("%s %s\n", "Fit: ", master.mbr_partcion[2].part_fit);
+                                printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
+                                printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
+
+                                // Montado montar;
+
+                                strcpy(montar[variablecuenta].Disco, "\0");
+                                strcpy(montar[variablecuenta].name, "\0");
+                                strcpy(montar[variablecuenta].id, "\0");
+
+                                break;
+                            }
+                            else
+                            {
+                                if (montar[variablecuenta].name == master.mbr_partcion[3].part_name)
+                                {
+                                    int pos = ftell(arch1) - sizeof(MBR);
+                                    strcpy(master.mbr_partcion[3].part_status, "0");
+
+                                    fseek(arch1, pos, SEEK_SET);
+                                    fwrite(&master, sizeof(MBR), 1, arch1);
+                                    printf("Se modifico los datos de la particion.\n");
+                                    printf("PARTICION DESACTIVADA.........\n");
+                                    existe = 1;
+
+                                    printf("%s %s\n", "Type: ", master.mbr_partcion[3].part_type);
+                                    printf("%s %s\n", "Status: ", master.mbr_partcion[3].part_status);
+                                    printf("%s %s\n", "Name: ", master.mbr_partcion[3].part_name);
+                                    printf("%s %s\n", "Fit: ", master.mbr_partcion[3].part_fit);
+                                    printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
+                                    printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
+
+                                    // Montado montar;
+
+                                    strcpy(montar[variablecuenta].Disco, "\0");
+                                    strcpy(montar[variablecuenta].name, "\0");
+                                    strcpy(montar[variablecuenta].id, "\0");
+
+                                    break;
+                                }
+                                else
+                                {
+                                    printf("NO HAY MAS PARTICIONES\n");
+                                    printf(" \n");
+                                    printf("ERROR/Advertencia: NO SE PUEDE ENCONTRAR LA PARTCION\n");
+                                    printf(" \n");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    fread(&master, sizeof(MBR), 1, arch1);
+                }
+
+                fclose(arch1);
+            }
+            else
+            {
+                printf(" \n");
+                printf("Buscando las particiones....\n");
+                printf("Analizando las particiones....\n");
+                printf(" \n");
+            }
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
 
     for (int ss = 0; ss < variablecuenta; ss++)
     {
@@ -2058,6 +2983,9 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
             path[0][strcspn(path[0], "\n")] = 0;
             fit[0][strcspn(fit[0], "\n")] = 0;
+            delet[0][strcspn(delet[0], "\n")] = 0;
+            size[0][strcspn(size[0], "\n")] = 0;
+            name[0][strcspn(name[0], "\n")] = 0;
 
             if ((strcmp(fit[0], "B") == 0) || (strcmp(fit[0], "F") == 0) || (strcmp(fit[0], "W") == 0) || (strcmp(fit[0], "BF") == 0) || (strcmp(fit[0], "FF") == 0) || (strcmp(fit[0], "WF") == 0))
             {
@@ -4475,6 +5403,7 @@ void MKDISK(char *x, char *y, char *z, char *v)
         printf("%s %s\n", "Esta es la direccion PATH:", path[0]);
 
         path[0][strcspn(path[0], "\n")] = 0;
+        size[0][strcspn(size[0], "\n")] = 0;
 
         arch = fopen(path[0], "wb");
 
@@ -4756,7 +5685,9 @@ void EXEC(char *x)
 
                         char *opcion = strtok(contenido, espacio);
 
-                        if (strcmp(opcion, "exit\n") == 0)
+                        opcion[strcspn(opcion, "\n")] = 0;
+
+                        if (strcmp(opcion, "exit") == 0)
                         {
                             printf("Cerrando CDM \n");
                         }
@@ -4910,12 +5841,77 @@ void EXEC(char *x)
                             cont = 0;
                             mknum[0] = NULL;
                         }
-
-                        else if (strcmp(opcion, "rep\n") == 0)
+                        else if (strcmp(opcion, "rep") == 0)
                         {
                             printf("EJECUTANDO: Comando rep \n");
                             printf("Analizando..... \n");
                             REP();
+                        }
+                        else if (strcmp(opcion, "mkfs") == 0)
+                        {
+                            printf("EJECUTANDO: Comando mkfs \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "mkfs") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            MKFS(mknum[0], mknum[1], mknum[2]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                            mknum[2] = NULL;
+                        }
+                        else if (strcmp(opcion, "login") == 0)
+                        {
+                            printf("EJECUTANDO: Comando login \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "login") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            LOGIN(mknum[0], mknum[1], mknum[2]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                            mknum[2] = NULL;
+                        }
+                        else if (strcmp(opcion, "logout") == 0)
+                        {
+                            printf("EJECUTANDO: Comando logout \n");
+                            printf("Analizando..... \n");
+                            LOGOUT();
                         }
                         else
                         {
@@ -5140,6 +6136,70 @@ int main()
                     break;
                 }
             }
+        }
+        else if (strcmp(split, "mkfs") == 0)
+        {
+            printf("EJECUTANDO: Comando mkfs \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "mkfs") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            MKFS(mknum[0], mknum[1], mknum[2]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+            mknum[2] = NULL;
+        }
+        else if (strcmp(split, "login") == 0)
+        {
+            printf("EJECUTANDO: Comando login \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "login") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            LOGIN(mknum[0], mknum[1], mknum[2]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+            mknum[2] = NULL;
+        }
+        else if (strcmp(split, "logout") == 0)
+        {
+            printf("EJECUTANDO: Comando logout \n");
+            printf("Analizando..... \n");
+            LOGOUT();
         }
         else
         {
