@@ -158,6 +158,1271 @@ char ID_UTILIZADO[10];
 
 char User_Actual[10];
 
+int n_grupo = 2;
+
+int n_usuario = 2;
+
+void MKFILE(char *x, char *y, char *z, char *v)
+{
+    printf("%s %s %s %s %s\n", "Esta prueba es de mkfile split:", x, y, z, v);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int u = 0;
+
+    int a = 0;
+
+    int f = 0;
+
+    char dd[5] = "0";
+
+    bool pr = false;
+
+    char *path[100];
+    char *size[100];
+    char *r[100];
+    char *cont[100];
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-size") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion size... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-size") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    size[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-r") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion r... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-r") == 0)
+                {
+                    printf("Analizando..... \n");
+                    pr = true;
+                    // split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-cont") == 0)
+        {
+            f = f + 1;
+            printf("Analizando comando, procesando instruccion cont... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-cont") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    cont[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    path[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-size") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion size... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-size") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    size[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-r") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion unit... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-r") == 0)
+                {
+                    printf("Analizando..... \n");
+                    // divi = strtok(NULL, " ");
+                    pr = true;
+                    printf(" %s\n", divi);
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-cont") == 0)
+        {
+            f = f + 1;
+            printf("Analizando comando, procesando instruccion cont... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-cont") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    cont[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *separar = strtok(z, igual);
+    printf(" %s\n", separar);
+
+    for (size_t i = 0; i < strlen(separar); ++i)
+    {
+        separar[i] = tolower((unsigned char)separar[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (separar != NULL)
+    {
+        if (strcmp(separar, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s", separar);
+                }
+                else
+                {
+                    printf(" %s", separar);
+                    path[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-size") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion size... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-size") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    size[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-r") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion r... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-r") == 0)
+                {
+                    printf("Analizando..... \n");
+                    // separar = strtok(NULL, " ");
+                    pr = true;
+                    printf(" %s\n", separar);
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-cont") == 0)
+        {
+            f = f + 1;
+            printf("Analizando comando, procesando instruccion cont... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-cont") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    cont[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *otra = strtok(v, igual);
+    printf(" %s\n", otra);
+
+    for (size_t i = 0; i < strlen(otra); ++i)
+    {
+        otra[i] = tolower((unsigned char)otra[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (otra != NULL)
+    {
+        if (strcmp(otra, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s", otra);
+                }
+                else
+                {
+                    printf(" %s", otra);
+                    path[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(otra, "-size") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion size... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-size") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s\n", otra);
+                }
+                else
+                {
+                    printf(" %s\n", otra);
+                    size[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(otra, "-r") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion r... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-r") == 0)
+                {
+                    printf("Analizando..... \n");
+                    // otra = strtok(NULL, " ");
+                    pr = true;
+                    printf(" %s\n", otra);
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(otra, "-cont") == 0)
+        {
+            f = f + 1;
+            printf("Analizando comando, procesando instruccion cont... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-cont") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s\n", otra);
+                }
+                else
+                {
+                    printf(" %s\n", otra);
+                    cont[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    if (a == 1 && (s == 0 || s == 1) && (u == 0 || u == 1) && (f == 0 || f == 1))
+    {
+
+        if (login == true)
+        {
+            if (strtol(size[0], NULL, 10) <= -1)
+            {
+                printf(" \n");
+                printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+                printf(" \n");
+            }
+            else
+            {
+                if(pr == false){
+
+                }else{
+
+                }
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
+void RMUSR(char *x)
+{
+    printf("%s %s\n", "Esta prueba es de rmgrp split:", x);
+    char igual[] = "=";
+
+    int a = 0;
+
+    int part = 0;
+
+    char *usuario[100];
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-usuario") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    usuario[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    if (a == 1)
+    {
+        if (login == true)
+        {
+            if (strcmp(User_Actual, "root") == 0)
+            {
+
+                FILE *arch1;
+                arch1 = fopen("users.txt", "r+b");
+                if (arch1 == NULL)
+                    exit(1);
+
+                Usuario user;
+                int cont = 0;
+                int existe = 1;
+                printf(" Actualizando Archivo....\n");
+
+                time_t t;
+
+                t = time(NULL);
+
+                fread(&user, sizeof(Usuario), 1, arch1);
+
+                while (!feof(arch1))
+                {
+
+                    if (usuario[0] == user.Usuario)
+                    {
+                        if (user.UID != 0)
+                        {
+                            user.UID = 0;
+
+                            int pos = ftell(arch1) - sizeof(Usuario);
+
+                            fseek(arch1, pos, SEEK_SET);
+                            fwrite(&user, sizeof(Usuario), 1, arch1);
+                            printf("Se modifico los datos de los usuarios.\n");
+                            existe = 0;
+
+                            break;
+                        }
+                        else
+                        {
+                            printf(" \n");
+                            printf("ERROR: EL USUARIO YA HA SIDO ELMINADO CON ANTERIORIDAD\n");
+                            printf(" \n");
+                        }
+                    }
+                    else
+                    {
+                        printf(" \n");
+                        printf("Buscando Datos.....\n");
+                        printf(" \n");
+                    }
+
+                    fread(&user, sizeof(Usuario), 1, arch1);
+                }
+
+                if (existe == 1)
+                {
+                    printf(" \n");
+                    printf("Datos no coinciden.....\n");
+                    printf("Reformular sus parametros.....\n");
+                    chdir("..");
+                    printf(" \n");
+                }
+
+                fclose(arch1);
+            }
+            else
+            {
+                printf(" \n");
+                printf("ERROR: Solo el usuario Root tiene acceso a este comando\n");
+                printf(" \n");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
+void MKUSR(char *x, char *y, char *z)
+{
+    printf("%s %s %s %s\n", "Esta prueba es de mkusr split:", x, y, z);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int u = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char *grp[100];
+    char *usuario[100];
+    char *password[100];
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-grp") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion grp... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-grp") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    grp[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-usuario") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    usuario[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-pwd") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion pwd... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-pwd") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    password[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-grp") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion grp... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-grp") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    grp[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-usuario") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    usuario[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-pwd") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion pwd... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-pwd") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    password[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *separar = strtok(z, igual);
+    printf(" %s\n", separar);
+
+    for (size_t i = 0; i < strlen(separar); ++i)
+    {
+        separar[i] = tolower((unsigned char)separar[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (separar != NULL)
+    {
+        if (strcmp(separar, "-grp") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion grp... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-grp") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s", separar);
+                }
+                else
+                {
+                    printf(" %s", separar);
+                    grp[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-usuario") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    usuario[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-pwd") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion pwd... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-pwd") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    password[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    if (a == 1 && s == 1 && u == 1)
+    {
+        if (login == true)
+        {
+            if (strcmp(User_Actual, "root") == 0)
+            {
+                if ((strcmp(grp[0], "root") == 0) || (strcmp(usuario[0], "root") == 0))
+                {
+                    printf(" \n");
+                    printf("ERROR: Solo puede haber un grupo Root y un usuario Root \n");
+                    printf(" \n");
+                }
+                else
+                {
+                    FILE *arch1;
+                    arch1 = fopen("users.txt", "ab");
+                    if (arch1 == NULL)
+                        exit(1);
+
+                    Usuario user;
+                    int cont = 0;
+                    printf("Añadiendo Usuario....\n");
+
+                    time_t t;
+
+                    t = time(NULL);
+
+                    user.UID = n_usuario;
+                    strcpy(user.Tipo, "U");
+                    strcpy(user.Grupo, grp[0]);
+                    strcpy(user.Usuario, usuario[0]);
+                    strcpy(user.Contrasenia, password[0]);
+
+                    n_usuario = n_usuario + 1;
+
+                    // int byte = sizeof(Usuario) + sizeof(Grupo);
+
+                    fwrite(&user, sizeof(Usuario), 1, arch1);
+
+                    fclose(arch1);
+                    printf(" \n");
+                    printf("Usuario creado en el archivo users.txt\n");
+
+                    printf(" \n");
+                }
+            }
+            else
+            {
+                printf(" \n");
+                printf("ERROR: Solo el usuario Root tiene acceso a este comando\n");
+                printf(" \n");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
+void RMGRP(char *x)
+{
+    printf("%s %s\n", "Esta prueba es de rmgrp split:", x);
+    char igual[] = "=";
+
+    int a = 0;
+
+    int part = 0;
+
+    char *name[100];
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-name") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    name[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    if (a == 1)
+    {
+        if (login == true)
+        {
+            if (strcmp(User_Actual, "root") == 0)
+            {
+
+                FILE *arch1;
+                arch1 = fopen("users.txt", "r+b");
+                if (arch1 == NULL)
+                    exit(1);
+
+                Grupo group;
+                int cont = 0;
+                int existe = 1;
+                printf(" Actualizando Archivo....\n");
+
+                time_t t;
+
+                t = time(NULL);
+
+                fread(&group, sizeof(Grupo), 1, arch1);
+
+                while (!feof(arch1))
+                {
+
+                    if (name[0] == group.Grupo)
+                    {
+                        if (group.GID != 0)
+                        {
+                            group.GID = 0;
+
+                            int pos = ftell(arch1) - sizeof(Grupo);
+
+                            fseek(arch1, pos, SEEK_SET);
+                            fwrite(&group, sizeof(Grupo), 1, arch1);
+                            printf("Se modifico los datos de los usuarios.\n");
+                            existe = 0;
+
+                            break;
+                        }
+                        else
+                        {
+                            printf(" \n");
+                            printf("ERROR: EL GRUPO YA HA SIDO ELMINADO CON ANTERIORIDAD\n");
+                            printf(" \n");
+                        }
+                    }
+                    else
+                    {
+                        printf(" \n");
+                        printf("Buscando Datos.....\n");
+                        printf(" \n");
+                    }
+
+                    fread(&group, sizeof(Grupo), 1, arch1);
+                }
+
+                if (existe == 1)
+                {
+                    printf(" \n");
+                    printf("Datos no coinciden.....\n");
+                    printf("Reformular sus parametros.....\n");
+                    chdir("..");
+                    printf(" \n");
+                }
+
+                fclose(arch1);
+            }
+            else
+            {
+                printf(" \n");
+                printf("ERROR: Solo el usuario Root tiene acceso a este comando\n");
+                printf(" \n");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
+void MKGRP(char *x)
+{
+
+    printf("%s %s\n", "Esta prueba es de mkgrp split:", x);
+    char igual[] = "=";
+
+    int a = 0;
+
+    int part = 0;
+
+    char *name[100];
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-name") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    name[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    if (a == 1)
+    {
+        if (login == true)
+        {
+            if (strcmp(User_Actual, "root") == 0)
+            {
+                if (strcmp(name[0], "root") == 0)
+                {
+                    printf(" \n");
+                    printf("ERROR: Solo puede haber un grupo Root \n");
+                    printf(" \n");
+                }
+                else
+                {
+                    FILE *arch1;
+                    arch1 = fopen("users.txt", "ab");
+                    if (arch1 == NULL)
+                        exit(1);
+
+                    Grupo group;
+                    int cont = 0;
+                    printf("Añadiendo Grupo....\n");
+
+                    time_t t;
+
+                    t = time(NULL);
+
+                    group.GID = n_grupo;
+                    strcpy(group.Tipo, "G");
+                    strcpy(group.Grupo, name[0]);
+
+                    n_grupo = n_grupo + 1;
+
+                    // int byte = sizeof(Usuario) + sizeof(Grupo);
+
+                    fwrite(&group, sizeof(Grupo), 1, arch1);
+
+                    fclose(arch1);
+                    printf(" \n");
+                    printf("Grupo creado en el archivo users.txt\n");
+
+                    printf(" \n");
+                }
+            }
+            else
+            {
+                printf(" \n");
+                printf("ERROR: Solo el usuario Root tiene acceso a este comando\n");
+                printf(" \n");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
 void LOGOUT()
 {
 
@@ -510,6 +1775,7 @@ void LOGIN(char *x, char *y, char *z)
                 printf(" \n");
                 printf("Datos no coinciden.....\n");
                 printf("Reformular sus parametros.....\n");
+                chdir("..");
                 printf(" \n");
             }
 
@@ -5919,6 +7185,151 @@ void EXEC(char *x)
                             printf("Analizando..... \n");
                             LOGOUT();
                         }
+                        else if (strcmp(opcion, "mkgrp") == 0)
+                        {
+                            printf("EJECUTANDO: Comando mkgrp \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "mkgrp") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            MKGRP(mknum[0]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                        }
+                        else if (strcmp(opcion, "rmgrp") == 0)
+                        {
+                            printf("EJECUTANDO: Comando rmgrp \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "rmgrp") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            RMGRP(mknum[0]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                        }
+                        else if (strcmp(opcion, "mkusr") == 0)
+                        {
+                            printf("EJECUTANDO: Comando mkusr \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "mkusr") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            MKUSR(mknum[0], mknum[1], mknum[2]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                            mknum[2] = NULL;
+                        }
+                        else if (strcmp(opcion, "rmusr") == 0)
+                        {
+                            printf("EJECUTANDO: Comando rmusr \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "rmusr") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            RMUSR(mknum[0]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                        }
+                        else if (strcmp(opcion, "mkfile") == 0)
+                        {
+                            printf("EJECUTANDO: Comando mkfile \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "mkfile") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            MKFILE(mknum[0], mknum[1], mknum[2], mknum[3]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                            mknum[2] = NULL;
+                            mknum[3] = NULL;
+                        }
                         else
                         {
                             printf(" \n");
@@ -5967,12 +7378,14 @@ int main()
     mknum[6] = NULL;
 
     printf("\n");
-    /* mkdir("hola", 0777);   //Solo funcionaron como prueba
+     /*mkdir("hola", 0777);   //Solo funcionaron como prueba
      chdir("hola");
      mkdir("Adios", 0777);
 
+     chdir("Adios");
+     mkdir("FF", 0777);
      chdir("..");
-     mkdir("FF", 0777);*/
+     mkdir("dodo", 0777);*/
 
     do
     {
@@ -6218,6 +7631,125 @@ int main()
             printf("EJECUTANDO: Comando logout \n");
             printf("Analizando..... \n");
             LOGOUT();
+        }
+        else if (strcmp(split, "mkgrp") == 0)
+        {
+            printf("EJECUTANDO: Comando mkgrp \n");
+            // printf("ADVERTENCIA: la dreccion del archivo NO debe tener espacios; Se mostrara ERROR \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "mkgrp") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    printf(" %s\n", split); // printing each token
+                    MKGRP(split);
+                    // split = strtok(NULL, " ");
+                    break;
+                }
+            }
+        }
+        else if (strcmp(split, "rmgrp") == 0)
+        {
+            printf("EJECUTANDO: Comando rmgrp \n");
+            // printf("ADVERTENCIA: la dreccion del archivo NO debe tener espacios; Se mostrara ERROR \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "rmgrp") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    printf(" %s\n", split); // printing each token
+                    RMGRP(split);
+                    // split = strtok(NULL, " ");
+                    break;
+                }
+            }
+        }
+        else if (strcmp(split, "mkusr") == 0)
+        {
+            printf("EJECUTANDO: Comando mkusr \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "mkusr") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            MKUSR(mknum[0], mknum[1], mknum[2]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+            mknum[2] = NULL;
+        }
+        else if (strcmp(split, "rmusr") == 0)
+        {
+            printf("EJECUTANDO: Comando rmusr\n");
+            // printf("ADVERTENCIA: la dreccion del archivo NO debe tener espacios; Se mostrara ERROR \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "rmusr") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    printf(" %s\n", split); // printing each token
+                    RMUSR(split);
+                    // split = strtok(NULL, " ");
+                    break;
+                }
+            }
+        }
+        else if (strcmp(split, "mkfile") == 0)
+        {
+            printf("EJECUTANDO: Comando mkfile \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "mkfile") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            MKFILE(mknum[0], mknum[1], mknum[2], mknum[3]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+            mknum[2] = NULL;
+            mknum[3] = NULL;
         }
         else
         {
