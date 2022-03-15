@@ -110,12 +110,12 @@ struct MBR
 
 struct Usuario
 {
-
     int UID;
     char Tipo[10];
     char Grupo[10];
     char Usuario[10];
     char Contrasenia[10];
+    int Permiso;
 };
 
 struct Grupo
@@ -158,9 +158,278 @@ char ID_UTILIZADO[10];
 
 char User_Actual[10];
 
+int Permiso_Actual;
+
 int n_grupo = 2;
 
 int n_usuario = 2;
+
+void REMOVE(char *x)
+{
+    printf("%s %s\n", "Esta prueba es de remove split:", x);
+    char igual[] = "=";
+
+    int a = 0;
+
+    int part = 0;
+
+    char *path[100];
+
+    char *cuenta[200];
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    path[0][strcspn(path[0], "\n")] = 0;
+
+    if (a == 1)
+    {
+        if (login == true)
+        {
+            // const char* filename = "input.txt";
+            char dia[] = "/";
+
+            char *diagonal = strtok(path[0], dia);
+            printf(" %s\n", diagonal);
+
+            int cont0 = 0;
+
+            int cont1 = 0;
+
+            int cantidad;
+
+            while (diagonal != NULL)
+            {
+                cuenta[cont0] = diagonal;
+
+                printf(" %s\n", cuenta[cont0]);
+
+                cont0 = cont0 + 1;
+                cont1 = cont1 + 1;
+                diagonal = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir(cuenta[j]);
+            }
+
+            rmdir(cuenta[cont1]);
+
+            FILE *archivo;
+            archivo = fopen(cuenta[cont1], "w");
+            // fprintf(archivo,"Hola Mundo");
+            fclose(archivo);
+
+            if (remove(cuenta[cont1]) == 0) // Eliminamos el archivo
+                printf("El archivo fue eliminado satisfactoriamente\n");
+            else
+                printf("No se pudo eliminar el archivo\n");
+
+            // system("PAUSE");
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir("..");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso de parametros\n");
+        printf(" \n");
+    }
+}
+
+void CAT(char *x)
+{
+    printf("%s %s\n", "Esta prueba es de cat split:", x);
+    char igual[] = "=";
+
+    int a = 0;
+
+    int part = 0;
+
+    char *cat[100];
+
+    char *cuenta[200];
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-file") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion file... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-file") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    cat[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d\n", "Prueba de parametros:", a);
+
+    cat[0][strcspn(cat[0], "\n")] = 0;
+
+    if (a == 0)
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios\n");
+        printf(" \n");
+    }
+    else
+    {
+        if (login == true)
+        {
+            // const char* filename = "input.txt";
+            char dia[] = "/";
+
+            char *diagonal = strtok(cat[0], dia);
+            printf(" %s\n", diagonal);
+
+            int cont0 = 0;
+
+            int cont1 = 0;
+
+            int cantidad;
+
+            while (diagonal != NULL)
+            {
+                cuenta[cont0] = diagonal;
+
+                printf(" %s\n", cuenta[cont0]);
+
+                cont0 = cont0 + 1;
+                cont1 = cont1 + 1;
+                diagonal = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir(cuenta[j]);
+            }
+
+            FILE *input_file = fopen(cuenta[cont1], "r");
+            if (!input_file)
+                exit(EXIT_FAILURE);
+
+            struct stat sb;
+            if (stat(cat[0], &sb) == -1)
+            {
+                perror("stat");
+                exit(EXIT_FAILURE);
+            }
+
+            char *file_contents = (char *)malloc(sb.st_size);
+            fread(file_contents, sb.st_size, 1, input_file);
+
+            printf("%s\n", file_contents);
+
+            fclose(input_file);
+            free(file_contents);
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir("..");
+            }
+
+            // exit(EXIT_SUCCESS);
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+}
 
 void MKFILE(char *x, char *y, char *z, char *v)
 {
@@ -176,6 +445,7 @@ void MKFILE(char *x, char *y, char *z, char *v)
     int f = 0;
 
     char dd[5] = "0";
+    char dl[5] = "\0";
 
     bool pr = false;
 
@@ -183,6 +453,8 @@ void MKFILE(char *x, char *y, char *z, char *v)
     char *size[100];
     char *r[100];
     char *cont[100];
+
+    char *cuenta[200];
 
     printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
 
@@ -607,6 +879,10 @@ void MKFILE(char *x, char *y, char *z, char *v)
 
     printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
 
+    path[0][strcspn(path[0], "\n")] = 0;
+    size[0][strcspn(size[0], "\n")] = 0;
+    cont[0][strcspn(cont[0], "\n")] = 0;
+
     if (a == 1 && (s == 0 || s == 1) && (u == 0 || u == 1) && (f == 0 || f == 1))
     {
 
@@ -620,10 +896,301 @@ void MKFILE(char *x, char *y, char *z, char *v)
             }
             else
             {
-                if(pr == false){
+                if (s == 0)
+                {
+                    printf("Valor size establecido automaticamente\n");
+                    size[0] = dd;
+                }
+                else
+                {
+                    printf("ValorEncontrado\n");
+                }
 
-                }else{
+                if (f == 0)
+                {
+                    printf("Valor cont establecido automaticamente\n");
+                    cont[0] = dl;
+                }
+                else
+                {
+                    printf("Valor Encontrado\n");
+                }
 
+                if (pr == false)
+                {
+                    if (f == 1)
+                    {
+                        /*char pth[] = "/Documentos/Manejo e Implemetacion de Archivos/[MIA]Proyecto1_201800517/-MIA-Proyecto1_201800517/";
+
+                    char archivo[100];
+
+                    strcat(strcpy(archivo, pth), ID_UTILIZADO);
+
+                    strcat(archivo, path[0]);*/
+
+                        char dia[] = "/";
+
+                        char *diagonal = strtok(path[0], dia);
+                        printf(" %s\n", diagonal);
+
+                        int cont0 = 0;
+
+                        int cont1 = 0;
+
+                        int cantidad;
+
+                        while (diagonal != NULL)
+                        {
+                            cuenta[cont0] = diagonal;
+
+                            printf(" %s\n", cuenta[cont0]);
+
+                            cont0 = cont0 + 1;
+                            cont1 = cont1 + 1;
+                            diagonal = strtok(NULL, " ");
+                        }
+
+                        for (int j = 0; j < cont0 - 1; j++)
+                        {
+                            chdir(cuenta[j]);
+                        }
+
+                        FILE *arch;
+                        FILE *arch1;
+
+                        char buffer[2048];
+                        // char nombre;
+                        printf("%s %s\n", "Esta es la direccion PATH:", cuenta[cont1]);
+
+                        arch = fopen(cuenta[cont1], "wb");
+                        arch1 = fopen(cont[0], "rb");
+
+                        if (arch == NULL)
+                        {
+                            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                            exit(1);
+                        }
+
+                        if (arch1 == NULL)
+                        {
+                            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                            exit(1);
+                        }
+
+                        while (!feof(arch1))
+                        {
+                            /* Leo datos: cada uno de 1 byte, todos los que me caben */
+                            cantidad = fread(buffer, 1, sizeof(buffer), arch1);
+                            /* Escribo tantos como haya leído */
+                            fwrite(buffer, 1, cantidad, arch);
+                        }
+
+                        fclose(arch);
+                        fclose(arch1);
+
+                        for (int j = 0; j < cont0 - 1; j++)
+                        {
+                            chdir("..");
+                        }
+                    }
+                    else
+                    {
+                        /*char pth[] = "/Documentos/Manejo e Implemetacion de Archivos/[MIA]Proyecto1_201800517/-MIA-Proyecto1_201800517/";
+
+                    char archivo[100];
+
+                    strcat(strcpy(archivo, pth), ID_UTILIZADO);
+
+                    strcat(archivo, path[0]);*/
+
+                        char dia[] = "/";
+
+                        char *diagonal = strtok(path[0], dia);
+                        printf(" %s\n", diagonal);
+
+                        int cont0 = 0;
+
+                        int cont1 = 0;
+
+                        int cantidad;
+
+                        while (diagonal != NULL)
+                        {
+                            cuenta[cont0] = diagonal;
+
+                            printf(" %s\n", cuenta[cont0]);
+
+                            cont0 = cont0 + 1;
+                            cont1 = cont1 + 1;
+                            diagonal = strtok(NULL, " ");
+                        }
+
+                        for (int j = 0; j < cont0 - 1; j++)
+                        {
+                            chdir(cuenta[j]);
+                        }
+
+                        FILE *arch;
+
+                        // char nombre;
+                        printf("%s %s\n", "Esta es la direccion PATH:", cuenta[cont1]);
+
+                        arch = fopen(cuenta[cont1], "wb");
+
+                        if (arch == NULL)
+                        {
+                            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                            exit(1);
+                        }
+
+                        fwrite(cont[0], 1, strtol(size[0], NULL, 10), arch);
+
+                        fclose(arch);
+
+                        for (int j = 0; j < cont0 - 1; j++)
+                        {
+                            chdir("..");
+                        }
+                    }
+                }
+                else
+                {
+                    if (f == 1)
+                    {
+                        /*char pth[] = "/Documentos/Manejo e Implemetacion de Archivos/[MIA]Proyecto1_201800517/-MIA-Proyecto1_201800517/";
+
+                    char archivo[100];
+
+                    strcat(strcpy(archivo, pth), ID_UTILIZADO);
+
+                    strcat(archivo, path[0]);*/
+
+                        char dia[] = "/";
+
+                        char *diagonal = strtok(path[0], dia);
+                        printf(" %s\n", diagonal);
+
+                        int cont0 = 0;
+
+                        int cont1 = 0;
+
+                        int cantidad;
+
+                        while (diagonal != NULL)
+                        {
+                            cuenta[cont0] = diagonal;
+
+                            printf(" %s\n", cuenta[cont0]);
+
+                            cont0 = cont0 + 1;
+                            cont1 = cont1 + 1;
+                            diagonal = strtok(NULL, " ");
+                        }
+
+                        for (int j = 0; j < cont0 - 1; j++)
+                        {
+                            mkdir(cuenta[j], 0777);
+                            chdir(cuenta[j]);
+                        }
+
+                        FILE *arch;
+                        FILE *arch1;
+
+                        char buffer[2048];
+                        // char nombre;
+                        printf("%s %s\n", "Esta es la direccion PATH:", cuenta[cont1]);
+
+                        arch = fopen(cuenta[cont1], "wb");
+                        arch1 = fopen(cont[0], "rb");
+
+                        if (arch == NULL)
+                        {
+                            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                            exit(1);
+                        }
+
+                        if (arch1 == NULL)
+                        {
+                            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                            exit(1);
+                        }
+
+                        while (!feof(arch1))
+                        {
+                            /* Leo datos: cada uno de 1 byte, todos los que me caben */
+                            cantidad = fread(buffer, 1, sizeof(buffer), arch1);
+                            /* Escribo tantos como haya leído */
+                            fwrite(buffer, 1, cantidad, arch);
+                        }
+
+                        fclose(arch);
+                        fclose(arch1);
+
+                        for (int j = 0; j < cont0 - 1; j++)
+                        {
+                            chdir("..");
+                        }
+                    }
+                    else
+                    {
+                        /*char pth[] = "/Documentos/Manejo e Implemetacion de Archivos/[MIA]Proyecto1_201800517/-MIA-Proyecto1_201800517/";
+
+                    char archivo[100];
+
+                    strcat(strcpy(archivo, pth), ID_UTILIZADO);
+
+                    strcat(archivo, path[0]);*/
+
+                        char dia[] = "/";
+
+                        char *diagonal = strtok(path[0], dia);
+                        printf(" %s\n", diagonal);
+
+                        int cont0 = 0;
+
+                        int cont1 = 0;
+
+                        int cantidad;
+
+                        while (diagonal != NULL)
+                        {
+                            cuenta[cont0] = diagonal;
+
+                            printf(" %s\n", cuenta[cont0]);
+
+                            cont0 = cont0 + 1;
+                            cont1 = cont1 + 1;
+                            diagonal = strtok(NULL, " ");
+                        }
+
+                        for (int j = 0; j < cont0 - 1; j++)
+                        {
+                            mkdir(cuenta[j], 0777);
+                            chdir(cuenta[j]);
+                        }
+
+                        FILE *arch;
+
+                        // char nombre;
+                        printf("%s %s\n", "Esta es la direccion PATH:", cuenta[cont1]);
+
+                        arch = fopen(cuenta[cont1], "wb");
+
+                        if (arch == NULL)
+                        {
+                            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                            exit(1);
+                        }
+
+                        fwrite(cont[0], 1, strtol(size[0], NULL, 10), arch);
+
+                        fclose(arch);
+
+                        for (int j = 0; j < cont0 - 1; j++)
+                        {
+                            chdir("..");
+                        }
+                    }
                 }
             }
         }
@@ -702,6 +1269,8 @@ void RMUSR(char *x)
 
     printf("%s %d\n", "Prueba de parametros:", a);
 
+    usuario[0][strcspn(usuario[0], "\n")] = 0;
+
     if (a == 1)
     {
         if (login == true)
@@ -712,7 +1281,10 @@ void RMUSR(char *x)
                 FILE *arch1;
                 arch1 = fopen("users.txt", "r+b");
                 if (arch1 == NULL)
+                {
+                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                     exit(1);
+                }
 
                 Usuario user;
                 int cont = 0;
@@ -1076,6 +1648,10 @@ void MKUSR(char *x, char *y, char *z)
 
     printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
 
+    grp[0][strcspn(grp[0], "\n")] = 0;
+    usuario[0][strcspn(usuario[0], "\n")] = 0;
+    password[0][strcspn(password[0], "\n")] = 0;
+
     if (a == 1 && s == 1 && u == 1)
     {
         if (login == true)
@@ -1093,7 +1669,10 @@ void MKUSR(char *x, char *y, char *z)
                     FILE *arch1;
                     arch1 = fopen("users.txt", "ab");
                     if (arch1 == NULL)
+                    {
+                        printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                         exit(1);
+                    }
 
                     Usuario user;
                     int cont = 0;
@@ -1108,6 +1687,7 @@ void MKUSR(char *x, char *y, char *z)
                     strcpy(user.Grupo, grp[0]);
                     strcpy(user.Usuario, usuario[0]);
                     strcpy(user.Contrasenia, password[0]);
+                    user.Permiso = 664;
 
                     n_usuario = n_usuario + 1;
 
@@ -1204,6 +1784,8 @@ void RMGRP(char *x)
 
     printf("%s %d\n", "Prueba de parametros:", a);
 
+    name[0][strcspn(name[0], "\n")] = 0;
+
     if (a == 1)
     {
         if (login == true)
@@ -1214,7 +1796,10 @@ void RMGRP(char *x)
                 FILE *arch1;
                 arch1 = fopen("users.txt", "r+b");
                 if (arch1 == NULL)
+                {
+                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                     exit(1);
+                }
 
                 Grupo group;
                 int cont = 0;
@@ -1356,6 +1941,8 @@ void MKGRP(char *x)
 
     printf("%s %d\n", "Prueba de parametros:", a);
 
+    name[0][strcspn(name[0], "\n")] = 0;
+
     if (a == 1)
     {
         if (login == true)
@@ -1373,7 +1960,10 @@ void MKGRP(char *x)
                     FILE *arch1;
                     arch1 = fopen("users.txt", "ab");
                     if (arch1 == NULL)
+                    {
+                        printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                         exit(1);
+                    }
 
                     Grupo group;
                     int cont = 0;
@@ -1431,6 +2021,7 @@ void LOGOUT()
         login = false;
         strcpy(ID_UTILIZADO, "\0");
         strcpy(User_Actual, "\0");
+        Permiso_Actual = 0;
         printf("Cerrando Login....\n");
         chdir("..");
         printf("Sesion Cerrada\n");
@@ -1726,6 +2317,10 @@ void LOGIN(char *x, char *y, char *z)
 
     printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
 
+    id[0][strcspn(id[0], "\n")] = 0;
+    usuario[0][strcspn(usuario[0], "\n")] = 0;
+    password[0][strcspn(password[0], "\n")] = 0;
+
     if (a == 1 && s == 1 && u == 1)
     {
         if (login == false)
@@ -1736,7 +2331,10 @@ void LOGIN(char *x, char *y, char *z)
             FILE *arch1;
             arch1 = fopen("users.txt", "rb");
             if (arch1 == NULL)
+            {
+                printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                 exit(1);
+            }
 
             Usuario user;
             int cont = 0;
@@ -1756,6 +2354,7 @@ void LOGIN(char *x, char *y, char *z)
                 {
                     strcpy(ID_UTILIZADO, id[0]);
                     strcpy(User_Actual, usuario[0]);
+                    Permiso_Actual = user.Permiso;
                     login = true;
                     existe = 0;
 
@@ -2194,14 +2793,20 @@ void MKFS(char *x, char *y, char *z)
         arch = fopen("users.txt", "wb");
 
         if (arch == NULL)
+        {
+            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
             exit(1);
+        }
         fclose(arch);
 
         printf("Creando archivo users.txt.......\n");
         FILE *arch1;
         arch1 = fopen("users.txt", "ab");
         if (arch1 == NULL)
+        {
+            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
             exit(1);
+        }
 
         Usuario user;
         Grupo group;
@@ -2225,6 +2830,7 @@ void MKFS(char *x, char *y, char *z)
         strcpy(user.Grupo, "root");
         strcpy(user.Usuario, "root");
         stpcpy(user.Contrasenia, "123");
+        user.Permiso = 777;
 
         fwrite(&user, sizeof(Usuario), 1, arch1);
 
@@ -2401,7 +3007,10 @@ void MOUNT(char *x, char *y)
         FILE *arch1;
         arch1 = fopen(path[0], "r+b");
         if (arch1 == NULL)
+        {
+            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
             exit(1);
+        }
 
         MBR master;
         int cont = 0;
@@ -2747,7 +3356,10 @@ void UNMOUNT(char *x)
                 FILE *arch1;
                 arch1 = fopen(montar[ss].Disco, "r+b");
                 if (arch1 == NULL)
+                {
+                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                     exit(1);
+                }
 
                 MBR master;
                 int cont = 0;
@@ -4238,7 +4850,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                             FILE *arch1;
                             arch1 = fopen(path[0], "r+b");
                             if (arch1 == NULL)
+                            {
+                                printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                 exit(1);
+                            }
 
                             MBR master;
                             int cont = 0;
@@ -4506,7 +5121,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                             FILE *arch1;
                             arch1 = fopen(path[0], "r+b");
                             if (arch1 == NULL)
+                            {
+                                printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                 exit(1);
+                            }
 
                             MBR master;
                             int cont = 0;
@@ -4773,7 +5391,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                             FILE *arch1;
                             arch1 = fopen(path[0], "r+b");
                             if (arch1 == NULL)
+                            {
+                                printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                 exit(1);
+                            }
 
                             MBR master;
                             int cont = 0;
@@ -5054,7 +5675,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                 FILE *arch1;
                                 arch1 = fopen(path[0], "r+b");
                                 if (arch1 == NULL)
+                                {
+                                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                     exit(1);
+                                }
 
                                 MBR master;
                                 int cont = 0;
@@ -5229,7 +5853,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                 FILE *arch1;
                                 arch1 = fopen(path[0], "r+b");
                                 if (arch1 == NULL)
+                                {
+                                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                     exit(1);
+                                }
 
                                 MBR master;
                                 int cont = 0;
@@ -5404,7 +6031,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                 FILE *arch1;
                                 arch1 = fopen(path[0], "r+b");
                                 if (arch1 == NULL)
+                                {
+                                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                     exit(1);
+                                }
 
                                 MBR master;
                                 int cont = 0;
@@ -5591,7 +6221,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                 FILE *arch1;
                                 arch1 = fopen(path[0], "r+b");
                                 if (arch1 == NULL)
+                                {
+                                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                     exit(1);
+                                }
 
                                 MBR master;
                                 int cont = 0;
@@ -5766,7 +6399,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                 FILE *arch1;
                                 arch1 = fopen(path[0], "r+b");
                                 if (arch1 == NULL)
+                                {
+                                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                     exit(1);
+                                }
 
                                 MBR master;
                                 int cont = 0;
@@ -5941,7 +6577,10 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                 FILE *arch1;
                                 arch1 = fopen(path[0], "r+b");
                                 if (arch1 == NULL)
+                                {
+                                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                                     exit(1);
+                                }
 
                                 MBR master;
                                 int cont = 0;
@@ -6668,7 +7307,10 @@ void MKDISK(char *x, char *y, char *z, char *v)
         arch = fopen(path[0], "wb");
 
         if (arch == NULL)
+        {
+            printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
             exit(1);
+        }
         fclose(arch);
 
         printf(" \n");
@@ -6688,7 +7330,10 @@ void MKDISK(char *x, char *y, char *z, char *v)
                 FILE *arch1;
                 arch1 = fopen(path[0], "ab");
                 if (arch1 == NULL)
+                {
+                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                     exit(1);
+                }
 
                 MBR master;
                 int cont = 0;
@@ -6742,7 +7387,10 @@ void MKDISK(char *x, char *y, char *z, char *v)
                 FILE *arch1;
                 arch1 = fopen(path[0], "ab");
                 if (arch1 == NULL)
+                {
+                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                     exit(1);
+                }
 
                 MBR master;
                 int cont = 0;
@@ -6822,7 +7470,10 @@ void REP()
     FILE *arch;
     arch = fopen("toto.dk", "rb");
     if (arch == NULL)
+    {
+        printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
         exit(1);
+    }
 
     MBR maestro;
     fread(&maestro, sizeof(MBR), 1, arch);
@@ -6930,6 +7581,7 @@ void EXEC(char *x)
 
                 if (arch == NULL)
                 {
+                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
                     exit(1);
                 }
                 else
@@ -7330,6 +7982,54 @@ void EXEC(char *x)
                             mknum[2] = NULL;
                             mknum[3] = NULL;
                         }
+                        else if (strcmp(opcion, "cat") == 0)
+                        {
+                            printf("EJECUTANDO: Comando cat \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "cat") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    printf(" %s\n", opcion); // printing each token
+                                    CAT(opcion);
+                                    opcion = strtok(NULL, " ");
+                                    // split = strtok(NULL, " ");
+                                }
+                            }
+                        }
+                        else if (strcmp(opcion, "remove") == 0)
+                        {
+                            printf("EJECUTANDO: Comando remove \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "remove") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            REMOVE(mknum[0]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                        }
                         else
                         {
                             printf(" \n");
@@ -7378,14 +8078,23 @@ int main()
     mknum[6] = NULL;
 
     printf("\n");
-     /*mkdir("hola", 0777);   //Solo funcionaron como prueba
-     chdir("hola");
-     mkdir("Adios", 0777);
+    /*mkdir("hola", 0777);   //Solo funcionaron como prueba
+    chdir("hola");
+    mkdir("Adios", 0777);
 
-     chdir("Adios");
-     mkdir("FF", 0777);
-     chdir("..");
-     mkdir("dodo", 0777);*/
+    chdir("Adios");
+    mkdir("FF", 0777);
+    chdir("..");
+    mkdir("dodo", 0777);
+
+    char dia[] = "/";
+
+    char ss[] = "/home/user/docs/a.txt";
+
+    char *diagonal = strtok(ss, dia);
+    printf(" %s %s\n", "Prueba diagonal: ", diagonal);
+    mkdir("nose", 0777);
+    chdir("nose");*/
 
     do
     {
@@ -7410,6 +8119,8 @@ int main()
         if (strcmp(split, "exit") == 0)
         {
             printf("Cerrando CDM \n");
+            /*chdir("..");
+            mkdir("nose", 0777);*/
         }
         else if (strcmp(split, "mkdisk") == 0)
         {
@@ -7750,6 +8461,46 @@ int main()
             mknum[1] = NULL;
             mknum[2] = NULL;
             mknum[3] = NULL;
+        }
+        else if (strcmp(split, "cat") == 0)
+        {
+            printf("EJECUTANDO: Comando cat \n");
+            // printf("ADVERTENCIA: la dreccion del archivo NO debe tener espacios; Se mostrara ERROR \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "cat") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    printf(" %s\n", split); // printing each token
+                    CAT(split);
+                    split = strtok(NULL, " ");
+                    // split = strtok(NULL, " ");
+                }
+            }
+        }
+        else if (strcmp(split, "remove") == 0)
+        {
+            printf("EJECUTANDO: Comando remove\n");
+            // printf("ADVERTENCIA: la dreccion del archivo NO debe tener espacios; Se mostrara ERROR \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "remove") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    printf(" %s\n", split); // printing each token
+                    REMOVE(split);
+                    // split = strtok(NULL, " ");
+                    break;
+                }
+            }
         }
         else
         {
