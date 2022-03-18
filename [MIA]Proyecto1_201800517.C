@@ -79,16 +79,6 @@ struct Montado
     char name[16];
 };
 
-struct Particion
-{
-    char part_status[5];
-    char part_type[5];
-    char part_fit[5];
-    int part_start;
-    int part_size;
-    char part_name[16];
-};
-
 struct EBR
 {
     char part_status[5];
@@ -97,6 +87,17 @@ struct EBR
     int part_size;
     int part_next;
     char part_name[16];
+};
+
+struct Particion
+{
+    char part_status[5];
+    char part_type[5];
+    char part_fit[5];
+    int part_start;
+    int part_size;
+    char part_name[16];
+    EBR part_ebr[1];
 };
 
 struct MBR
@@ -163,6 +164,1417 @@ int Permiso_Actual;
 int n_grupo = 2;
 
 int n_usuario = 2;
+
+void CHGRP(char *x, char *y)
+{
+    printf("%s %s %s\n", "Esta prueba es de mount split:", x, y);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char *usuario[100];
+    char *grp[100];
+    char *cuenta[200];
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-usuario") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    usuario[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-grp") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion grp... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-grp") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    grp[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-usuario") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion usuario... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-usuario") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    usuario[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-grp") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion grp... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-grp") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    grp[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d\n", "Prueba de parametros:", a, s);
+
+    usuario[0][strcspn(usuario[0], "\n")] = 0;
+    grp[0][strcspn(grp[0], "\n")] = 0;
+
+    if (a == 1 && s == 1)
+    {
+        if (login == true)
+        {
+            if (strcmp(User_Actual, "root") == 0)
+            {
+
+                FILE *arch1;
+                arch1 = fopen("users.txt", "r+b");
+                if (arch1 == NULL)
+                {
+                    printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                    exit(1);
+                }
+
+                Usuario user;
+                int cont = 0;
+                int existe = 1;
+                printf(" Actualizando Archivo....\n");
+
+                time_t t;
+
+                t = time(NULL);
+
+                fread(&user, sizeof(Usuario), 1, arch1);
+
+                while (!feof(arch1))
+                {
+
+                    if (usuario[0] == user.Usuario)
+                    {
+                        if (user.UID != 0)
+                        {
+                            strcpy(user.Grupo, grp[0]);
+
+                            int pos = ftell(arch1) - sizeof(Usuario);
+
+                            fseek(arch1, pos, SEEK_SET);
+                            fwrite(&user, sizeof(Usuario), 1, arch1);
+                            printf("Se modifico los datos de los usuarios.\n");
+                            existe = 0;
+
+                            break;
+                        }
+                        else
+                        {
+                            printf(" \n");
+                            printf("ERROR: EL USUARIO YA HA SIDO ELMINADO CON ANTERIORIDAD\n");
+                            printf(" \n");
+                        }
+                    }
+                    else
+                    {
+                        printf(" \n");
+                        printf("Buscando Datos.....\n");
+                        printf(" \n");
+                    }
+
+                    fread(&user, sizeof(Usuario), 1, arch1);
+                }
+
+                if (existe == 1)
+                {
+                    printf(" \n");
+                    printf("Datos no coinciden.....\n");
+                    printf("Reformular sus parametros.....\n");
+                    chdir("..");
+                    printf(" \n");
+                }
+
+                fclose(arch1);
+            }
+            else
+            {
+                printf(" \n");
+                printf("ERROR: Solo el usuario Root tiene acceso a este comando\n");
+                printf(" \n");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso de parametros\n");
+        printf(" \n");
+    }
+}
+
+void MOVE(char *x, char *y)
+{
+    printf("%s %s %s\n", "Esta prueba es de mount split:", x, y);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char *path[100];
+    char *destino[100];
+    char *cuenta[200];
+    char *cuenta2[200];
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-destino") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion destino... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-destino") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    destino[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    path[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-destino") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion destino... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-destino") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    destino[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d\n", "Prueba de parametros:", a, s);
+
+    path[0][strcspn(path[0], "\n")] = 0;
+    destino[0][strcspn(destino[0], "\n")] = 0;
+
+    if (a == 1 && s == 1)
+    {
+        if (login == true)
+        {
+            char dia[] = "/";
+
+            char *diagonal = strtok(path[0], dia);
+            printf(" %s\n", diagonal);
+
+            int cont0 = 0;
+
+            int cont1 = -1;
+
+            int cantidad;
+
+            while (diagonal != NULL)
+            {
+                cuenta[cont0] = diagonal;
+
+                printf(" %s\n", cuenta[cont0]);
+
+                cont0 = cont0 + 1;
+                cont1 = cont1 + 1;
+                diagonal = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir(cuenta[j]);
+            }
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir("..");
+            }
+
+            char *diagonal2 = strtok(destino[0], dia);
+            printf(" %s\n", diagonal2);
+
+            int sont0 = 0;
+
+            int sont1 = -1;
+
+            while (diagonal2 != NULL)
+            {
+                cuenta2[sont0] = diagonal2;
+
+                printf(" %s\n", cuenta2[sont0]);
+
+                sont0 = sont0 + 1;
+                sont1 = sont1 + 1;
+                diagonal2 = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < sont0 - 1; j++)
+            {
+                chdir(cuenta2[j]);
+            }
+
+            for (int j = 0; j < sont0 - 1; j++)
+            {
+                chdir("..");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
+void COPY(char *x, char *y)
+{
+    printf("%s %s %s\n", "Esta prueba es de mount split:", x, y);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char *path[100];
+    char *destino[100];
+    char *cuenta[200];
+    char *cuenta2[200];
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-destino") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion destino... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-destino") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    destino[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    path[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-destino") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion destino... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-destino") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    destino[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d\n", "Prueba de parametros:", a, s);
+
+    path[0][strcspn(path[0], "\n")] = 0;
+    destino[0][strcspn(destino[0], "\n")] = 0;
+
+    if (a == 1 && s == 1)
+    {
+        if (login == true)
+        {
+            char dia[] = "/";
+
+            char *diagonal = strtok(path[0], dia);
+            printf(" %s\n", diagonal);
+
+            int cont0 = 0;
+
+            int cont1 = -1;
+
+            int cantidad;
+
+            while (diagonal != NULL)
+            {
+                cuenta[cont0] = diagonal;
+
+                printf(" %s\n", cuenta[cont0]);
+
+                cont0 = cont0 + 1;
+                cont1 = cont1 + 1;
+                diagonal = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir(cuenta[j]);
+            }
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir("..");
+            }
+
+            char *diagonal2 = strtok(destino[0], dia);
+            printf(" %s\n", diagonal2);
+
+            int sont0 = 0;
+
+            int sont1 = -1;
+
+            while (diagonal2 != NULL)
+            {
+                cuenta2[sont0] = diagonal2;
+
+                printf(" %s\n", cuenta2[sont0]);
+
+                sont0 = sont0 + 1;
+                sont1 = sont1 + 1;
+                diagonal2 = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < sont0 - 1; j++)
+            {
+                chdir(cuenta2[j]);
+            }
+
+            for (int j = 0; j < sont0 - 1; j++)
+            {
+                chdir("..");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
+void MKDIR(char *x, char *y)
+{
+    printf("%s %s %s\n", "Esta prueba es de mkfile split:", x, y);
+    char igual[] = "=";
+
+    int u = 0;
+
+    int a = 0;
+
+    char dd[5] = "0";
+    char dl[5] = "\0";
+
+    bool pr = false;
+
+    char *path[100];
+    char *p[100];
+
+    char *cuenta[200];
+
+    printf("%s %d %d\n", "Prueba de parametros:", a, u);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-p") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion p... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-p") == 0)
+                {
+                    printf("Analizando..... \n");
+                    pr = true;
+                    // split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    path[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-p") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion p... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-p") == 0)
+                {
+                    printf("Analizando..... \n");
+                    // divi = strtok(NULL, " ");
+                    pr = true;
+                    printf(" %s\n", divi);
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d  %d\n", "Prueba de parametros:", a, u);
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d  %d\n", "Prueba de parametros:", a, u);
+
+    path[0][strcspn(path[0], "\n")] = 0;
+
+    if (a == 1 && (u == 0 || u == 1))
+    {
+        if (login == true)
+        {
+            if (pr == false)
+            {
+                char dia[] = "/";
+
+                char *diagonal = strtok(path[0], dia);
+                printf(" %s\n", diagonal);
+
+                int cont0 = 0;
+
+                int cont1 = -1;
+
+                int cantidad;
+
+                while (diagonal != NULL)
+                {
+                    cuenta[cont0] = diagonal;
+
+                    printf(" %s\n", cuenta[cont0]);
+
+                    cont0 = cont0 + 1;
+                    cont1 = cont1 + 1;
+                    diagonal = strtok(NULL, " ");
+                }
+
+                for (int j = 0; j < cont0 - 1; j++)
+                {
+                    chdir(cuenta[j]);
+                }
+
+                mkdir(cuenta[cont1], 0777);
+
+                for (int j = 0; j < cont0 - 1; j++)
+                {
+                    chdir("..");
+                }
+            }
+            else
+            {
+                char dia[] = "/";
+
+                char *diagonal = strtok(path[0], dia);
+                printf(" %s\n", diagonal);
+
+                int cont0 = 0;
+
+                int cont1 = -1;
+
+                int cantidad;
+
+                while (diagonal != NULL)
+                {
+                    cuenta[cont0] = diagonal;
+
+                    printf(" %s\n", cuenta[cont0]);
+
+                    cont0 = cont0 + 1;
+                    cont1 = cont1 + 1;
+                    diagonal = strtok(NULL, " ");
+                }
+
+                for (int j = 0; j < cont0 - 1; j++)
+                {
+                    mkdir(cuenta[j], 0777);
+                    chdir(cuenta[j]);
+                }
+
+                mkdir(cuenta[cont1], 0777);
+
+                for (int j = 0; j < cont0 - 1; j++)
+                {
+                    chdir("..");
+                }
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
+void RENAME(char *x, char *y)
+{
+    printf("%s %s %s\n", "Esta prueba es de mount split:", x, y);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char *path[100];
+    char *name[100];
+    char *cuenta[200];
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-name") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    name[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    path[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-name") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    name[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d\n", "Prueba de parametros:", a, s);
+
+    path[0][strcspn(path[0], "\n")] = 0;
+    name[0][strcspn(name[0], "\n")] = 0;
+
+    if (a == 1 && s == 1)
+    {
+        if (login == true)
+        {
+            char dia[] = "/";
+
+            char *diagonal = strtok(path[0], dia);
+            printf(" %s\n", diagonal);
+
+            int cont0 = 0;
+
+            int cont1 = -1;
+
+            int cantidad;
+
+            while (diagonal != NULL)
+            {
+                cuenta[cont0] = diagonal;
+
+                printf(" %s\n", cuenta[cont0]);
+
+                cont0 = cont0 + 1;
+                cont1 = cont1 + 1;
+                diagonal = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir(cuenta[j]);
+            }
+
+            FILE *archivo;
+            archivo = fopen(cuenta[cont1], "w");
+            // fprintf(archivo,"Hola Mundo");
+            fclose(archivo);
+
+            if (rename(cuenta[cont1], name[0]) == 0) // Eliminamos el archivo
+                printf("El archivo se renombro satisfactoriamente\n");
+            else
+                printf("No se pudo renombrer el archivo\n");
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir("..");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
+
+void EDIT(char *x, char *y)
+{
+    printf("%s %s %s\n", "Esta prueba es de mount split:", x, y);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int a = 0;
+
+    int part = 0;
+
+    char *path[100];
+    char *contenido[100];
+    char *cuenta[200];
+    char *cuenta2[200];
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-contenido") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion contenido... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-contenido") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    contenido[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    path[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-contenido") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion contenido... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-contenido") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    contenido[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d\n", "Prueba de parametros:", a, s);
+
+    path[0][strcspn(path[0], "\n")] = 0;
+    contenido[0][strcspn(contenido[0], "\n")] = 0;
+
+    if (a == 1 && s == 1)
+    {
+        if (login == true)
+        {
+            char dia[] = "/";
+
+            char *diagonal = strtok(path[0], dia);
+            printf(" %s\n", diagonal);
+
+            int cont0 = 0;
+
+            int cont1 = -1;
+
+            int cantidad;
+
+            while (diagonal != NULL)
+            {
+                cuenta[cont0] = diagonal;
+
+                printf(" %s\n", cuenta[cont0]);
+
+                cont0 = cont0 + 1;
+                cont1 = cont1 + 1;
+                diagonal = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir(cuenta[j]);
+            }
+
+            FILE *arch;
+            FILE *arch1;
+
+            char buffer[2048];
+            // char nombre;
+            printf("%s %s\n", "Esta es la direccion PATH:", cuenta[cont1]);
+
+            arch = fopen(cuenta[cont1], "ab");
+
+            for (int j = 0; j < cont0 - 1; j++)
+            {
+                chdir("..");
+            }
+
+            char *diagonal2 = strtok(contenido[0], dia);
+            printf(" %s\n", diagonal2);
+
+            int sont0 = 0;
+
+            int sont1 = -1;
+
+            while (diagonal2 != NULL)
+            {
+                cuenta2[sont0] = diagonal2;
+
+                printf(" %s\n", cuenta2[sont0]);
+
+                sont0 = sont0 + 1;
+                sont1 = sont1 + 1;
+                diagonal2 = strtok(NULL, " ");
+            }
+
+            for (int j = 0; j < sont0 - 1; j++)
+            {
+                chdir(cuenta2[j]);
+            }
+
+            arch1 = fopen(cuenta2[sont1], "rb");
+
+            if (arch == NULL)
+            {
+                printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                exit(1);
+            }
+
+            if (arch1 == NULL)
+            {
+                printf("ERROR: NO SE PUDO EJECUTAR LA FUNCION DEL ARCHIVO\n");
+                exit(1);
+            }
+
+            while (!feof(arch1))
+            {
+                /* Leo datos: cada uno de 1 byte, todos los que me caben */
+                cantidad = fread(buffer, 1, sizeof(buffer), arch1);
+                /* Escribo tantos como haya leído */
+                fwrite(buffer, 1, cantidad, arch);
+            }
+
+            fclose(arch);
+            fclose(arch1);
+
+            for (int j = 0; j < sont0 - 1; j++)
+            {
+                chdir("..");
+            }
+        }
+        else
+        {
+            printf(" \n");
+            printf("Sesion no iniciada");
+            printf("Se Debe iniciar sesion primero\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+}
 
 void REMOVE(char *x)
 {
@@ -239,7 +1651,7 @@ void REMOVE(char *x)
 
             int cont0 = 0;
 
-            int cont1 = 0;
+            int cont1 = -1;
 
             int cantidad;
 
@@ -259,7 +1671,7 @@ void REMOVE(char *x)
                 chdir(cuenta[j]);
             }
 
-            rmdir(cuenta[cont1]);
+            // rmdir(cuenta[cont1]);
 
             FILE *archivo;
             archivo = fopen(cuenta[cont1], "w");
@@ -375,7 +1787,7 @@ void CAT(char *x)
 
             int cont0 = 0;
 
-            int cont1 = 0;
+            int cont1 = -1;
 
             int cantidad;
 
@@ -935,7 +2347,7 @@ void MKFILE(char *x, char *y, char *z, char *v)
 
                         int cont0 = 0;
 
-                        int cont1 = 0;
+                        int cont1 = -1;
 
                         int cantidad;
 
@@ -1010,7 +2422,7 @@ void MKFILE(char *x, char *y, char *z, char *v)
 
                         int cont0 = 0;
 
-                        int cont1 = 0;
+                        int cont1 = -1;
 
                         int cantidad;
 
@@ -1072,7 +2484,7 @@ void MKFILE(char *x, char *y, char *z, char *v)
 
                         int cont0 = 0;
 
-                        int cont1 = 0;
+                        int cont1 = -1;
 
                         int cantidad;
 
@@ -1148,7 +2560,7 @@ void MKFILE(char *x, char *y, char *z, char *v)
 
                         int cont0 = 0;
 
-                        int cont1 = 0;
+                        int cont1 = -1;
 
                         int cantidad;
 
@@ -4892,6 +6304,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             strcpy(master.mbr_partcion[0].part_status, ru);
                                             master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
 
+                                            if (strcmp(type[0], "E") == 0)
+                                            {
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_status, ru);
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_fit, fit[0]);
+                                                master.mbr_partcion[0].part_ebr[0].part_start = pos;
+                                                master.mbr_partcion[0].part_ebr[0].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+                                                master.mbr_partcion[0].part_ebr[0].part_next = ftell(arch1);
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_name, name[0]);
+                                            }
+
                                             fseek(arch1, pos, SEEK_SET);
                                             fwrite(&master, sizeof(MBR), 1, arch1);
                                             printf("Se modifico los datos de la particion.\n");
@@ -4949,6 +6371,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 master.mbr_partcion[1].part_start = pos;
                                                 strcpy(master.mbr_partcion[1].part_status, ru);
                                                 master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+
+                                                if (strcmp(type[0], "E") == 0)
+                                                {
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_status, ru);
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_fit, fit[0]);
+                                                    master.mbr_partcion[1].part_ebr[0].part_start = pos;
+                                                    master.mbr_partcion[1].part_ebr[0].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+                                                    master.mbr_partcion[1].part_ebr[0].part_next = ftell(arch1);
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_name, name[0]);
+                                                }
 
                                                 fseek(arch1, pos, SEEK_SET);
                                                 fwrite(&master, sizeof(MBR), 1, arch1);
@@ -5008,6 +6440,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     master.mbr_partcion[2].part_start = pos;
                                                     master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
 
+                                                    if (strcmp(type[0], "E") == 0)
+                                                    {
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_status, ru);
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_fit, fit[0]);
+                                                        master.mbr_partcion[2].part_ebr[0].part_start = pos;
+                                                        master.mbr_partcion[2].part_ebr[0].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+                                                        master.mbr_partcion[2].part_ebr[0].part_next = ftell(arch1);
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_name, name[0]);
+                                                    }
+
                                                     fseek(arch1, pos, SEEK_SET);
                                                     fwrite(&master, sizeof(MBR), 1, arch1);
                                                     printf("Se modifico los datos de la particion.\n");
@@ -5064,6 +6506,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                         master.mbr_partcion[3].part_start = pos;
                                                         strcpy(master.mbr_partcion[3].part_status, ru);
                                                         master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+
+                                                        if (strcmp(type[0], "E") == 0)
+                                                        {
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_status, ru);
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_fit, fit[0]);
+                                                            master.mbr_partcion[3].part_ebr[0].part_start = pos;
+                                                            master.mbr_partcion[3].part_ebr[0].part_size = strtol(size[0], NULL, 10) * 1024 * 1024;
+                                                            master.mbr_partcion[3].part_ebr[0].part_next = ftell(arch1);
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_name, name[0]);
+                                                        }
 
                                                         fseek(arch1, pos, SEEK_SET);
                                                         fwrite(&master, sizeof(MBR), 1, arch1);
@@ -5162,6 +6614,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             strcpy(master.mbr_partcion[0].part_status, ru);
                                             master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10);
 
+                                            if (strcmp(type[0], "E") == 0)
+                                            {
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_status, ru);
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_fit, fit[0]);
+                                                master.mbr_partcion[0].part_ebr[0].part_start = pos;
+                                                master.mbr_partcion[0].part_ebr[0].part_size = strtol(size[0], NULL, 10);
+                                                master.mbr_partcion[0].part_ebr[0].part_next = ftell(arch1);
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_name, name[0]);
+                                            }
+
                                             fseek(arch1, pos, SEEK_SET);
                                             fwrite(&master, sizeof(MBR), 1, arch1);
                                             printf("Se modifico los datos de la particion.\n");
@@ -5219,6 +6681,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 master.mbr_partcion[1].part_start = pos;
                                                 strcpy(master.mbr_partcion[1].part_status, ru);
                                                 master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10);
+
+                                                if (strcmp(type[0], "E") == 0)
+                                                {
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_status, ru);
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_fit, fit[0]);
+                                                    master.mbr_partcion[1].part_ebr[0].part_start = pos;
+                                                    master.mbr_partcion[1].part_ebr[0].part_size = strtol(size[0], NULL, 10);
+                                                    master.mbr_partcion[1].part_ebr[0].part_next = ftell(arch1);
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_name, name[0]);
+                                                }
 
                                                 fseek(arch1, pos, SEEK_SET);
                                                 fwrite(&master, sizeof(MBR), 1, arch1);
@@ -5278,6 +6750,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     strcpy(master.mbr_partcion[2].part_status, ru);
                                                     master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10);
 
+                                                    if (strcmp(type[0], "E") == 0)
+                                                    {
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_status, ru);
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_fit, fit[0]);
+                                                        master.mbr_partcion[2].part_ebr[0].part_start = pos;
+                                                        master.mbr_partcion[2].part_ebr[0].part_size = strtol(size[0], NULL, 10);
+                                                        master.mbr_partcion[2].part_ebr[0].part_next = ftell(arch1);
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_name, name[0]);
+                                                    }
+
                                                     fseek(arch1, pos, SEEK_SET);
                                                     fwrite(&master, sizeof(MBR), 1, arch1);
                                                     printf("Se modifico los datos de la particion.\n");
@@ -5334,6 +6816,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                         master.mbr_partcion[3].part_start = pos;
                                                         strcpy(master.mbr_partcion[3].part_status, ru);
                                                         master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10);
+
+                                                        if (strcmp(type[0], "E") == 0)
+                                                        {
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_status, ru);
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_fit, fit[0]);
+                                                            master.mbr_partcion[3].part_ebr[0].part_start = pos;
+                                                            master.mbr_partcion[3].part_ebr[0].part_size = strtol(size[0], NULL, 10);
+                                                            master.mbr_partcion[3].part_ebr[0].part_next = ftell(arch1);
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_name, name[0]);
+                                                        }
 
                                                         fseek(arch1, pos, SEEK_SET);
                                                         fwrite(&master, sizeof(MBR), 1, arch1);
@@ -5432,6 +6924,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             strcpy(master.mbr_partcion[0].part_status, ru);
                                             master.mbr_partcion[0].part_size = strtol(size[0], NULL, 10) * 1024;
 
+                                            if (strcmp(type[0], "E") == 0)
+                                            {
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_status, ru);
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_fit, fit[0]);
+                                                master.mbr_partcion[0].part_ebr[0].part_start = pos;
+                                                master.mbr_partcion[0].part_ebr[0].part_size = strtol(size[0], NULL, 10) * 1024;
+                                                master.mbr_partcion[0].part_ebr[0].part_next = ftell(arch1);
+                                                strcpy(master.mbr_partcion[0].part_ebr[0].part_name, name[0]);
+                                            }
+
                                             fseek(arch1, pos, SEEK_SET);
                                             fwrite(&master, sizeof(MBR), 1, arch1);
                                             printf("Se modifico los datos de la particion.\n");
@@ -5489,6 +6991,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 master.mbr_partcion[1].part_start = pos;
                                                 strcpy(master.mbr_partcion[1].part_status, ru);
                                                 master.mbr_partcion[1].part_size = strtol(size[0], NULL, 10) * 1024;
+
+                                                if (strcmp(type[0], "E") == 0)
+                                                {
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_status, ru);
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_fit, fit[0]);
+                                                    master.mbr_partcion[1].part_ebr[0].part_start = pos;
+                                                    master.mbr_partcion[1].part_ebr[0].part_size = strtol(size[0], NULL, 10) * 1024;
+                                                    master.mbr_partcion[1].part_ebr[0].part_next = ftell(arch1);
+                                                    strcpy(master.mbr_partcion[1].part_ebr[0].part_name, name[0]);
+                                                }
 
                                                 fseek(arch1, pos, SEEK_SET);
                                                 fwrite(&master, sizeof(MBR), 1, arch1);
@@ -5548,6 +7060,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     strcpy(master.mbr_partcion[2].part_status, ru);
                                                     master.mbr_partcion[2].part_size = strtol(size[0], NULL, 10) * 1024;
 
+                                                    if (strcmp(type[0], "E") == 0)
+                                                    {
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_status, ru);
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_fit, fit[0]);
+                                                        master.mbr_partcion[2].part_ebr[0].part_start = pos;
+                                                        master.mbr_partcion[2].part_ebr[0].part_size = strtol(size[0], NULL, 10) * 1024;
+                                                        master.mbr_partcion[2].part_ebr[0].part_next = ftell(arch1);
+                                                        strcpy(master.mbr_partcion[2].part_ebr[0].part_name, name[0]);
+                                                    }
+
                                                     fseek(arch1, pos, SEEK_SET);
                                                     fwrite(&master, sizeof(MBR), 1, arch1);
                                                     printf("Se modifico los datos de la particion.\n");
@@ -5604,6 +7126,16 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                         master.mbr_partcion[3].part_start = pos;
                                                         strcpy(master.mbr_partcion[3].part_status, ru);
                                                         master.mbr_partcion[3].part_size = strtol(size[0], NULL, 10) * 1024;
+
+                                                        if (strcmp(type[0], "E") == 0)
+                                                        {
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_status, ru);
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_fit, fit[0]);
+                                                            master.mbr_partcion[3].part_ebr[0].part_start = pos;
+                                                            master.mbr_partcion[3].part_ebr[0].part_size = strtol(size[0], NULL, 10) * 1024;
+                                                            master.mbr_partcion[3].part_ebr[0].part_next = ftell(arch1);
+                                                            strcpy(master.mbr_partcion[3].part_ebr[0].part_name, name[0]);
+                                                        }
 
                                                         fseek(arch1, pos, SEEK_SET);
                                                         fwrite(&master, sizeof(MBR), 1, arch1);
@@ -7524,6 +9056,8 @@ void EXEC(char *x)
 
     char *mknum[200];
 
+    char xx[200];
+
     mknum[0] = NULL;
     mknum[1] = NULL;
     mknum[2] = NULL;
@@ -8030,6 +9564,186 @@ void EXEC(char *x)
                             cont = 0;
                             mknum[0] = NULL;
                         }
+                        else if (strcmp(opcion, "edit") == 0)
+                        {
+                            printf("EJECUTANDO: Comando edit \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "edit") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            EDIT(mknum[0], mknum[1]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                        }
+                        else if (strcmp(opcion, "rename") == 0)
+                        {
+                            printf("EJECUTANDO: Comando rename \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "rename") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            RENAME(mknum[0], mknum[1]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                        }
+                        else if (strcmp(opcion, "mkdir") == 0)
+                        {
+                            printf("EJECUTANDO: Comando mkdir \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "mkdir") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            MKDIR(mknum[0], mknum[1]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                        }
+                        else if (strcmp(opcion, "copy") == 0)
+                        {
+                            printf("EJECUTANDO: Comando copy \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "copy") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            COPY(mknum[0], mknum[1]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                        }
+                        else if (strcmp(opcion, "move") == 0)
+                        {
+                            printf("EJECUTANDO: Comando move \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "move") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            MOVE(mknum[0], mknum[1]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                        }
+                        else if (strcmp(opcion, "chgrp") == 0)
+                        {
+                            printf("EJECUTANDO: Comando chgrp \n");
+                            printf("Analizando..... \n");
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "chgrp") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            CHGRP(mknum[0], mknum[1]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                        }
+                        else if (strcmp(split, "pause") == 0)
+                        {
+                            printf("PRESIONE ENTER PARA CONTINUAR\n");
+                            fgets(xx, 200, stdin);
+                            printf("Puede Continuar\n");
+                        }
                         else
                         {
                             printf(" \n");
@@ -8062,6 +9776,8 @@ int main()
 {
 
     char cmd[200];
+
+    char xx[200];
 
     char espacio[] = " ";
 
@@ -8096,6 +9812,8 @@ int main()
     mkdir("nose", 0777);
     chdir("nose");*/
 
+    // mkdir("seta", 0777);
+
     do
     {
         // printf("Prueba: ");
@@ -8119,6 +9837,9 @@ int main()
         if (strcmp(split, "exit") == 0)
         {
             printf("Cerrando CDM \n");
+            // printf("Press 'Enter' to continue: ... ");
+            // while (getchar() != '\n')
+            //  system("pause");
             /*chdir("..");
             mkdir("nose", 0777);*/
         }
@@ -8501,6 +10222,180 @@ int main()
                     break;
                 }
             }
+        }
+        else if (strcmp(split, "edit") == 0)
+        {
+            printf("EJECUTANDO: Comando edit \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "edit") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            EDIT(mknum[0], mknum[1]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+        }
+        else if (strcmp(split, "rename") == 0)
+        {
+            printf("EJECUTANDO: Comando rename \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "rename") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            RENAME(mknum[0], mknum[1]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+        }
+        else if (strcmp(split, "mkdir") == 0)
+        {
+            printf("EJECUTANDO: Comando mkdir \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "mkdir") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            MKDIR(mknum[0], mknum[1]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+        }
+        else if (strcmp(split, "copy") == 0)
+        {
+            printf("EJECUTANDO: Comando copy \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "copy") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            COPY(mknum[0], mknum[1]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+        }
+        else if (strcmp(split, "move") == 0)
+        {
+            printf("EJECUTANDO: Comando move \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "move") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            MOVE(mknum[0], mknum[1]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+        }
+        else if (strcmp(split, "pause") == 0)
+        {
+            printf("PRESIONE ENTER PARA CONTINUAR\n");
+            fgets(xx, 200, stdin);
+            printf("Puede Continuar\n");
+        }
+        else if (strcmp(split, "chgrp") == 0)
+        {
+            printf("EJECUTANDO: Comando chgrp \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "chgrp") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            CHGRP(mknum[0], mknum[1]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
         }
         else
         {
