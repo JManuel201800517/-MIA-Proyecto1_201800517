@@ -343,7 +343,7 @@ void CHGRP(char *x, char *y)
                 while (!feof(arch1))
                 {
 
-                    if (usuario[0] == user.Usuario)
+                    if (strcmp(usuario[0], user.Usuario)==0)
                     {
                         if (user.UID != 0)
                         {
@@ -2714,7 +2714,7 @@ void RMUSR(char *x)
                 while (!feof(arch1))
                 {
 
-                    if (usuario[0] == user.Usuario)
+                    if (strcmp(usuario[0], user.Usuario)==0)
                     {
                         if (user.UID != 0)
                         {
@@ -3229,7 +3229,7 @@ void RMGRP(char *x)
                 while (!feof(arch1))
                 {
 
-                    if (name[0] == group.Grupo)
+                    if (strcmp(name[0], group.Grupo)==0)
                     {
                         if (group.GID != 0)
                         {
@@ -3764,7 +3764,7 @@ void LOGIN(char *x, char *y, char *z)
             while (!feof(arch1))
             {
 
-                if (user.Usuario == usuario[0] && user.Contrasenia == password[0])
+                if (strcmp(user.Usuario, usuario[0])==0 && strcmp(user.Contrasenia, password[0])==0)
                 {
                     strcpy(ID_UTILIZADO, id[0]);
                     strcpy(User_Actual, usuario[0]);
@@ -4426,6 +4426,8 @@ void MOUNT(char *x, char *y)
             exit(1);
         }
 
+        printf("%s %s \n", "Prueba de entrada:", path[0]);
+
         MBR master;
         int cont = 0;
         int existe = 1;
@@ -4437,9 +4439,15 @@ void MOUNT(char *x, char *y)
 
         fread(&master, sizeof(MBR), 1, arch1);
 
+
+
+
         while (!feof(arch1))
         {
-            if (name[0] == master.mbr_partcion[0].part_name)
+             printf("%s %s \n", "name[0] ", name[0]);
+
+            printf("%s %s \n", "master.nombre", master.mbr_partcion[0].part_name);
+            if (strcmp(name[0], master.mbr_partcion[0].part_name) == 0)
             {
                 int pos = ftell(arch1) - sizeof(MBR);
                 strcpy(master.mbr_partcion[0].part_status, "1");
@@ -4498,7 +4506,7 @@ void MOUNT(char *x, char *y)
             }
             else
             {
-                if (name[0] == master.mbr_partcion[1].part_name)
+                if (strcmp(name[0] ,master.mbr_partcion[1].part_name)==0)
                 {
                     int pos = ftell(arch1) - sizeof(MBR);
                     strcpy(master.mbr_partcion[1].part_status, "1");
@@ -4557,7 +4565,7 @@ void MOUNT(char *x, char *y)
                 }
                 else
                 {
-                    if (name[0] == master.mbr_partcion[2].part_name)
+                    if (strcmp(name[0] , master.mbr_partcion[2].part_name)==0)
                     {
                         int pos = ftell(arch1) - sizeof(MBR);
                         strcpy(master.mbr_partcion[2].part_status, "1");
@@ -4616,7 +4624,7 @@ void MOUNT(char *x, char *y)
                     }
                     else
                     {
-                        if (name[0] == master.mbr_partcion[3].part_name)
+                        if (strcmp(name[0] , master.mbr_partcion[3].part_name)==0)
                         {
                             int pos = ftell(arch1) - sizeof(MBR);
                             strcpy(master.mbr_partcion[3].part_status, "1");
@@ -4764,7 +4772,7 @@ void UNMOUNT(char *x)
         for (int ss = 0; ss < variablecuenta; ss++)
         {
 
-            if (id[0] == montar[ss].id)
+            if (strcmp(id[0], montar[ss].id)==0)
             {
 
                 FILE *arch1;
@@ -4788,7 +4796,7 @@ void UNMOUNT(char *x)
 
                 while (!feof(arch1))
                 {
-                    if (montar[ss].name == master.mbr_partcion[0].part_name)
+                    if (strcmp(montar[ss].name, master.mbr_partcion[0].part_name)==0)
                     {
                         int pos = ftell(arch1) - sizeof(MBR);
                         strcpy(master.mbr_partcion[0].part_status, "0");
@@ -4818,7 +4826,7 @@ void UNMOUNT(char *x)
                     }
                     else
                     {
-                        if (montar[ss].name == master.mbr_partcion[1].part_name)
+                        if (strcmp(montar[ss].name, master.mbr_partcion[1].part_name)==0)
                         {
                             int pos = ftell(arch1) - sizeof(MBR);
                             strcpy(master.mbr_partcion[1].part_status, "0");
@@ -4848,7 +4856,7 @@ void UNMOUNT(char *x)
                         }
                         else
                         {
-                            if (montar[ss].name == master.mbr_partcion[2].part_name)
+                            if (strcmp(montar[ss].name ,master.mbr_partcion[2].part_name)==0)
                             {
                                 int pos = ftell(arch1) - sizeof(MBR);
                                 strcpy(master.mbr_partcion[2].part_status, "0");
@@ -4878,7 +4886,7 @@ void UNMOUNT(char *x)
                             }
                             else
                             {
-                                if (montar[ss].name == master.mbr_partcion[3].part_name)
+                                if (strcmp(montar[ss].name , master.mbr_partcion[3].part_name)==0)
                                 {
                                     int pos = ftell(arch1) - sizeof(MBR);
                                     strcpy(master.mbr_partcion[3].part_status, "0");
@@ -6029,11 +6037,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
     char *elim = strtok(del, igual);
     printf(" %s\n", elim);
 
-    for (size_t i = 0; i < strlen(elim); ++i)
+    /*for (size_t i = 0; i < strlen(elim); ++i)
     {
         elim[i] = tolower((unsigned char)elim[i]);
         // printf(" %c\n", split[i]);
-    }
+    }*/
 
     while (elim != NULL)
     {
@@ -6247,7 +6255,7 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
 
             path[0][strcspn(path[0], "\n")] = 0;
             fit[0][strcspn(fit[0], "\n")] = 0;
-            delet[0][strcspn(delet[0], "\n")] = 0;
+            //delet[0][strcspn(delet[0], "\n")] = 0;
             size[0][strcspn(size[0], "\n")] = 0;
             name[0][strcspn(name[0], "\n")] = 0;
 
