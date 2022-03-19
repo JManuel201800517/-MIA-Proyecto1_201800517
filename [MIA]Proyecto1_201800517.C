@@ -153,6 +153,8 @@ int variablecuenta = 0;
 
 Montado montar[100];
 
+SuperBloque super[1];
+
 bool login = false;
 
 char ID_UTILIZADO[10];
@@ -4965,6 +4967,8 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
     char *fit[100];
     char *delet[100];
 
+    char *ss[100];
+
     char dd[5] = "W";
     char d1[5] = "K";
     char hu[5] = "P";
@@ -7236,11 +7240,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                         printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
                                         printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
 
-                                        delet[0] = ru;
+                                        //delet[0] = ru;
 
-                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_type, "0");
+                                        strcpy(master.mbr_partcion[0].part_fit, "0");
+                                        strcpy(master.mbr_partcion[0].part_name, "0");
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
                                         int pos = ftell(arch1) - sizeof(MBR);
@@ -7270,11 +7274,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
                                             printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
 
-                                            delet[0] = ru;
+                                            //delet[0] = ru;
 
-                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_type, "0");
+                                            strcpy(master.mbr_partcion[1].part_fit, "0");
+                                            strcpy(master.mbr_partcion[1].part_name, "0");
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
                                             int pos = ftell(arch1) - sizeof(MBR);
@@ -7304,11 +7308,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
                                                 printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
 
-                                                delet[0] = ru;
+                                                //delet[0] = ru;
 
-                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_type, "0");
+                                                strcpy(master.mbr_partcion[2].part_fit, "0");
+                                                strcpy(master.mbr_partcion[2].part_name, "0");
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
                                                 int pos = ftell(arch1) - sizeof(MBR);
@@ -7338,11 +7342,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
                                                     printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
 
-                                                    delet[0] = ru;
+                                                    //delet[0] = ru;
 
-                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_type, "0");
+                                                    strcpy(master.mbr_partcion[3].part_fit, "0");
+                                                    strcpy(master.mbr_partcion[3].part_name, "0");
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
                                                     int pos = ftell(arch1) - sizeof(MBR);
@@ -7414,11 +7418,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                         printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
                                         printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
 
-                                        delet[0] = ru;
+                                        //delet[0] = ru;
 
-                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_type, "0");
+                                        strcpy(master.mbr_partcion[0].part_fit, "0");
+                                        strcpy(master.mbr_partcion[0].part_name, "0");
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
                                         int pos = ftell(arch1) - sizeof(MBR);
@@ -7448,11 +7452,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
                                             printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
 
-                                            delet[0] = ru;
+                                            //delet[0] = ru;
 
-                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_type, "0");
+                                            strcpy(master.mbr_partcion[1].part_fit, "0");
+                                            strcpy(master.mbr_partcion[1].part_name, "0");
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
                                             int pos = ftell(arch1) - sizeof(MBR);
@@ -7482,11 +7486,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
                                                 printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
 
-                                                delet[0] = ru;
+                                                //delet[0] = ru;
 
-                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_type, "0");
+                                                strcpy(master.mbr_partcion[2].part_fit, "0");
+                                                strcpy(master.mbr_partcion[2].part_name, "0");
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
                                                 int pos = ftell(arch1) - sizeof(MBR);
@@ -7516,11 +7520,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
                                                     printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
 
-                                                    delet[0] = ru;
+                                                    //delet[0] = ru;
 
-                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_type, "0");
+                                                    strcpy(master.mbr_partcion[3].part_fit, "0");
+                                                    strcpy(master.mbr_partcion[3].part_name, "0");
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
                                                     int pos = ftell(arch1) - sizeof(MBR);
@@ -7592,11 +7596,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                         printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
                                         printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
 
-                                        delet[0] = ru;
+                                        //delet[0] = ru;
 
-                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_type, "0");
+                                        strcpy(master.mbr_partcion[0].part_fit, "0");
+                                        strcpy(master.mbr_partcion[0].part_name, "0");
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
                                         int pos = ftell(arch1) - sizeof(MBR);
@@ -7626,11 +7630,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
                                             printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
 
-                                            delet[0] = ru;
+                                            //delet[0] = ru;
 
-                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_type, "0");
+                                            strcpy(master.mbr_partcion[1].part_fit, "0");
+                                            strcpy(master.mbr_partcion[1].part_name, "0");
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
                                             int pos = ftell(arch1) - sizeof(MBR);
@@ -7660,11 +7664,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
                                                 printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
 
-                                                delet[0] = ru;
+                                                //delet[0] = ru;
 
-                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_type, "0");
+                                                strcpy(master.mbr_partcion[2].part_fit, "0");
+                                                strcpy(master.mbr_partcion[2].part_name, "0");
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
                                                 int pos = ftell(arch1) - sizeof(MBR);
@@ -7694,11 +7698,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
                                                     printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
 
-                                                    delet[0] = ru;
+                                                    //delet[0] = ru;
 
-                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_type, "0");
+                                                    strcpy(master.mbr_partcion[3].part_fit, "0");
+                                                    strcpy(master.mbr_partcion[3].part_name, "0");
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
                                                     int pos = ftell(arch1) - sizeof(MBR);
@@ -7782,11 +7786,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                         printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
                                         printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
 
-                                        delet[0] = ru1;
+                                        //delet[0] = ru1;
 
-                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_type, "\0");
+                                        strcpy(master.mbr_partcion[0].part_fit, "\0");
+                                        strcpy(master.mbr_partcion[0].part_name, "\0");
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
                                         int pos = ftell(arch1) - sizeof(MBR);
@@ -7816,11 +7820,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
                                             printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
 
-                                            delet[0] = ru1;
+                                            //delet[0] = ru1;
 
-                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_type, "\0");
+                                            strcpy(master.mbr_partcion[1].part_fit, "\0");
+                                            strcpy(master.mbr_partcion[1].part_name, "\0");
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
                                             int pos = ftell(arch1) - sizeof(MBR);
@@ -7850,11 +7854,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
                                                 printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
 
-                                                delet[0] = ru1;
+                                                //delet[0] = ru1;
 
-                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_type, "\0");
+                                                strcpy(master.mbr_partcion[2].part_fit, "\0");
+                                                strcpy(master.mbr_partcion[2].part_name, "\0");
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
                                                 int pos = ftell(arch1) - sizeof(MBR);
@@ -7884,11 +7888,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
                                                     printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
 
-                                                    delet[0] = ru1;
+                                                    //delet[0] = ru1;
 
-                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_type, "\0");
+                                                    strcpy(master.mbr_partcion[3].part_fit, "\0");
+                                                    strcpy(master.mbr_partcion[3].part_name, "\0");
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
                                                     int pos = ftell(arch1) - sizeof(MBR);
@@ -7960,11 +7964,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                         printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
                                         printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
 
-                                        delet[0] = ru1;
+                                        //delet[0] = ru1;
 
-                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_type, "\0");
+                                        strcpy(master.mbr_partcion[0].part_fit, "\0");
+                                        strcpy(master.mbr_partcion[0].part_name, "\0");
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
                                         int pos = ftell(arch1) - sizeof(MBR);
@@ -7994,11 +7998,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
                                             printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
 
-                                            delet[0] = ru1;
+                                            //delet[0] = ru1;
 
-                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_type, "\0");
+                                            strcpy(master.mbr_partcion[1].part_fit, "\0");
+                                            strcpy(master.mbr_partcion[1].part_name, "\0");
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
                                             int pos = ftell(arch1) - sizeof(MBR);
@@ -8028,11 +8032,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
                                                 printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
 
-                                                delet[0] = ru1;
+                                                //delet[0] = ru1;
 
-                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_type, "\0");
+                                                strcpy(master.mbr_partcion[2].part_fit, "\0");
+                                                strcpy(master.mbr_partcion[2].part_name, "\0");
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
                                                 int pos = ftell(arch1) - sizeof(MBR);
@@ -8062,11 +8066,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
                                                     printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
 
-                                                    delet[0] = ru1;
+                                                    //delet[0] = ru1;
 
-                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_type, "\0");
+                                                    strcpy(master.mbr_partcion[3].part_fit, "\0");
+                                                    strcpy(master.mbr_partcion[3].part_name, "\0");
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
                                                     int pos = ftell(arch1) - sizeof(MBR);
@@ -8138,11 +8142,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                         printf("%s %d\n", "Start: ", master.mbr_partcion[0].part_start);
                                         printf("%s %d\n", "Size: ", master.mbr_partcion[0].part_size);
 
-                                        delet[0] = ru1;
+                                        //delet[0] = ru1;
 
-                                        strcpy(master.mbr_partcion[0].part_type, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_fit, delet[0]);
-                                        strcpy(master.mbr_partcion[0].part_name, delet[0]);
+                                        strcpy(master.mbr_partcion[0].part_type, "\0");
+                                        strcpy(master.mbr_partcion[0].part_fit, "\0");
+                                        strcpy(master.mbr_partcion[0].part_name, "\0");
                                         master.mbr_partcion[0].part_start = 0;
                                         master.mbr_partcion[0].part_size = 0;
                                         int pos = ftell(arch1) - sizeof(MBR);
@@ -8172,11 +8176,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                             printf("%s %d\n", "Start: ", master.mbr_partcion[1].part_start);
                                             printf("%s %d\n", "Size: ", master.mbr_partcion[1].part_size);
 
-                                            delet[0] = ru1;
+                                            //delet[0] = ru1;
 
-                                            strcpy(master.mbr_partcion[1].part_type, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_fit, delet[0]);
-                                            strcpy(master.mbr_partcion[1].part_name, delet[0]);
+                                            strcpy(master.mbr_partcion[1].part_type, "\0");
+                                            strcpy(master.mbr_partcion[1].part_fit, "\0");
+                                            strcpy(master.mbr_partcion[1].part_name, "\0");
                                             master.mbr_partcion[1].part_start = 0;
                                             master.mbr_partcion[1].part_size = 0;
                                             int pos = ftell(arch1) - sizeof(MBR);
@@ -8206,11 +8210,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                 printf("%s %d\n", "Start: ", master.mbr_partcion[2].part_start);
                                                 printf("%s %d\n", "Size: ", master.mbr_partcion[2].part_size);
 
-                                                delet[0] = ru1;
+                                                //delet[0] = ru1;
 
-                                                strcpy(master.mbr_partcion[2].part_type, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_fit, delet[0]);
-                                                strcpy(master.mbr_partcion[2].part_name, delet[0]);
+                                                strcpy(master.mbr_partcion[2].part_type, "\0");
+                                                strcpy(master.mbr_partcion[2].part_fit, "\0");
+                                                strcpy(master.mbr_partcion[2].part_name, "\0");
                                                 master.mbr_partcion[2].part_start = 0;
                                                 master.mbr_partcion[2].part_size = 0;
                                                 int pos = ftell(arch1) - sizeof(MBR);
@@ -8240,11 +8244,11 @@ void FDISK(char *x, char *y, char *z, char *v, char *ty, char *fi, char *del)
                                                     printf("%s %d\n", "Start: ", master.mbr_partcion[3].part_start);
                                                     printf("%s %d\n", "Size: ", master.mbr_partcion[3].part_size);
 
-                                                    delet[0] = ru1;
+                                                    //delet[0] = ru1;
 
-                                                    strcpy(master.mbr_partcion[3].part_type, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_fit, delet[0]);
-                                                    strcpy(master.mbr_partcion[3].part_name, delet[0]);
+                                                    strcpy(master.mbr_partcion[3].part_type, "\0");
+                                                    strcpy(master.mbr_partcion[3].part_fit, "\0");
+                                                    strcpy(master.mbr_partcion[3].part_name, "\0");
                                                     master.mbr_partcion[3].part_start = 0;
                                                     master.mbr_partcion[3].part_size = 0;
                                                     int pos = ftell(arch1) - sizeof(MBR);
@@ -8993,13 +8997,591 @@ void MKDISK(char *x, char *y, char *z, char *v)
     }
 }
 
-void REP()
+void REP(char *x, char *y, char *z, char *v)
 {
     printf(" \n");
     printf("Procesando.... \n");
+    // int part = 0;
+
+    printf("%s %s %s %s %s\n", "Esta prueba es de mkdisk split:", x, y, z, v);
+    char igual[] = "=";
+
+    int s = 0;
+
+    int u = 0;
+
+    int a = 0;
+
+    int f = 0;
+
     int part = 0;
 
-    FILE *arch;
+    int exito = 0;
+
+    int yy = 0;
+
+    char dd[5] = "F";
+    char d1[5] = "m";
+    char hu[5] = "0";
+
+    char *path[100];
+    char *name[100];
+    char *id[100];
+    char *ruta[100];
+
+    char *cero[100];
+
+    char *sino[100];
+
+    // fit[0] = "FF";
+    // unit[0] = "m";
+
+    // unit[0] = "m";
+
+    // printf("%s %s\n", "Este es el fit:", fit[0]);
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *split = strtok(x, igual);
+    printf(" %s\n", split);
+
+    for (size_t i = 0; i < strlen(split); ++i)
+    {
+        split[i] = tolower((unsigned char)split[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (split != NULL)
+    {
+        if (strcmp(split, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    path[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-name") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    name[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-id") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    id[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(split, "-ruta") == 0)
+        {
+            f = f + 1;
+            printf("Analizando comando, procesando instruccion ruta... \n");
+            printf("Analizando..... \n");
+            while (split != NULL)
+            {
+                if (strcmp(split, "-ruta") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                    printf(" %s\n", split);
+                }
+                else
+                {
+                    printf(" %s\n", split);
+                    ruta[0] = split;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *divi = strtok(y, igual);
+    printf(" %s\n", divi);
+
+    for (size_t i = 0; i < strlen(divi); ++i)
+    {
+        divi[i] = tolower((unsigned char)divi[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (divi != NULL)
+    {
+        if (strcmp(divi, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    path[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-name") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    name[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-id") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    id[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(divi, "-ruta") == 0)
+        {
+            f = f + 1;
+            printf("Analizando comando, procesando instruccion ruta... \n");
+            printf("Analizando..... \n");
+            while (divi != NULL)
+            {
+                if (strcmp(divi, "-ruta") == 0)
+                {
+                    printf("Analizando..... \n");
+                    divi = strtok(NULL, " ");
+                    printf(" %s\n", divi);
+                }
+                else
+                {
+                    printf(" %s\n", divi);
+                    ruta[0] = divi;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    char *separar = strtok(z, igual);
+    printf(" %s\n", separar);
+
+    for (size_t i = 0; i < strlen(separar); ++i)
+    {
+        separar[i] = tolower((unsigned char)separar[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (separar != NULL)
+    {
+        if (strcmp(separar, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s", separar);
+                }
+                else
+                {
+                    printf(" %s", separar);
+                    path[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-name") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    name[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-id") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    id[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(separar, "-ruta") == 0)
+        {
+            f = f + 1;
+            printf("Analizando comando, procesando instruccion ruta... \n");
+            printf("Analizando..... \n");
+            while (separar != NULL)
+            {
+                if (strcmp(separar, "-ruta") == 0)
+                {
+                    printf("Analizando..... \n");
+                    separar = strtok(NULL, " ");
+                    printf(" %s\n", separar);
+                }
+                else
+                {
+                    printf(" %s\n", separar);
+                    ruta[0] = separar;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    char *otra = strtok(v, igual);
+    printf(" %s\n", otra);
+
+    for (size_t i = 0; i < strlen(otra); ++i)
+    {
+        otra[i] = tolower((unsigned char)otra[i]);
+        // printf(" %c\n", split[i]);
+    }
+
+    while (otra != NULL)
+    {
+        if (strcmp(otra, "-path") == 0)
+        {
+            a = a + 1;
+            printf("Analizando comando, procesando instruccion path... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-path") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s", otra);
+                }
+                else
+                {
+                    printf(" %s", otra);
+                    path[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(otra, "-name") == 0)
+        {
+            s = s + 1;
+            printf("Analizando comando, procesando instruccion name... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-name") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s\n", otra);
+                }
+                else
+                {
+                    printf(" %s\n", otra);
+                    name[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(otra, "-id") == 0)
+        {
+            u = u + 1;
+            printf("Analizando comando, procesando instruccion id... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-id") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s\n", otra);
+                }
+                else
+                {
+                    printf(" %s\n", otra);
+                    id[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (strcmp(otra, "-ruta") == 0)
+        {
+            f = f + 1;
+            printf("Analizando comando, procesando instruccion ruta... \n");
+            printf("Analizando..... \n");
+            while (otra != NULL)
+            {
+                if (strcmp(otra, "-ruta") == 0)
+                {
+                    printf("Analizando..... \n");
+                    otra = strtok(NULL, " ");
+                    printf(" %s\n", otra);
+                }
+                else
+                {
+                    printf(" %s\n", otra);
+                    ruta[0] = otra;
+                    break;
+                }
+            }
+            break;
+        }
+        else
+        {
+            printf(" \n");
+            printf("ERROR/Advbertencia: comando inexistente u variable nula\n");
+            printf(" \n");
+            break;
+        }
+    }
+
+    printf("Prueba de la llegada\n");
+
+    printf("%s %d %d %d\n", "Prueba de parametros:", a, s, u);
+
+    path[0][strcspn(path[0], "\n")] = 0;
+    name[0][strcspn(name[0], "\n")] = 0;
+    id[0][strcspn(id[0], "\n")] = 0;
+    ruta[0][strcspn(ruta[0], "\n")] = 0;
+
+    if (a == 1 && s == 1 && u == 1 && (f == 0 || f == 1))
+    {
+        if ((strcmp(name[0], "MBR") == 0) || (strcmp(name[0], "disk") == 0) || (strcmp(name[0], "inode") == 0) || (strcmp(name[0], "Journaling") == 0) || (strcmp(name[0], "block") == 0) || (strcmp(name[0], "bm_inode") == 0) || (strcmp(name[0], "bm_block") == 0) || (strcmp(name[0], "tree") == 0) || (strcmp(name[0], "sb") == 0) || (strcmp(name[0], "file") == 0) || (strcmp(name[0], "ls") == 0))
+        {
+
+            if ((strcmp(name[0], "MBR") == 0))
+            {
+                while (part <= 100)
+                {
+
+                    if (id[0] == montar[part].id)
+                    {
+
+                        FILE *arch;
+                        arch = fopen(montar[part].Disco, "rb");
+                        if (arch == NULL)
+                            exit(1);
+
+                        MBR maestro;
+                        fread(&maestro, sizeof(MBR), 1, arch);
+
+                        while (!feof(arch))
+                        {
+                            printf("Reporte del MBR \n");
+                            printf("mbr_tamano: ");
+                            printf("%d\n", maestro.mbr_tamano);
+                            printf("mbr_fecha_creacion: ");
+                            printf("%ld\n", maestro.mbr_fecha_creacion);
+                            printf("mbr_dsk_signature: ");
+                            printf("%d\n", maestro.mbr_dsk_signature);
+
+                            while (yy <= 3)
+                            {
+                                printf("Particion \n");
+                                printf("part_status: ");
+                                printf("%s\n", maestro.mbr_partcion[yy].part_status);
+                                printf("part_type: ");
+                                printf("%s\n", maestro.mbr_partcion[yy].part_type);
+                                printf("part_fit: ");
+                                printf("%s\n", maestro.mbr_partcion[yy].part_fit);
+                                printf("part_start: ");
+                                printf("%d\n", maestro.mbr_partcion[yy].part_start);
+                                printf("part_size: ");
+                                printf("%d\n", maestro.mbr_partcion[yy].part_size);
+                                printf("part_name: ");
+                                printf("%s\n", maestro.mbr_partcion[yy].part_name);
+
+                                if ((strcmp(maestro.mbr_partcion[yy].part_type, "E") == 0))
+                                {
+                                    printf("Particion Extendida\n");
+                                    printf("part_status: ");
+                                    printf("%s\n", maestro.mbr_partcion[yy].part_ebr[0].part_status);
+                                    printf("part_next: ");
+                                    printf("%d\n", maestro.mbr_partcion[yy].part_ebr[0].part_next);
+                                    printf("part_fit: ");
+                                    printf("%s\n", maestro.mbr_partcion[yy].part_ebr[0].part_fit);
+                                    printf("part_start: ");
+                                    printf("%d\n", maestro.mbr_partcion[yy].part_ebr[0].part_start);
+                                    printf("part_size: ");
+                                    printf("%d\n", maestro.mbr_partcion[yy].part_ebr[0].part_size);
+                                    printf("part_name: ");
+                                    printf("%s\n", maestro.mbr_partcion[yy].part_ebr[0].part_name);
+                                }
+                            }
+
+                            fread(&maestro, sizeof(MBR), 1, arch);
+                        }
+
+                        exito = 1;
+                        break;
+                    }
+
+                    part = part + 1;
+                }
+
+                if (exito == 0)
+                {
+                    printf("Variable id no encontrada\n");
+                    printf(" \n");
+                }
+            }
+        }
+        else
+        {
+            printf("NO ENTRO AL NAME\n");
+            printf(" \n");
+            printf("ERROR/Advertencia: valor inexistente u variable nula\n");
+            printf(" \n");
+        }
+    }
+    else
+    {
+        printf(" \n");
+        printf("ERROR: Falta de parametros obligatorios o exceso del mismo parametro\n");
+        printf(" \n");
+    }
+
+    /*FILE *arch;
     arch = fopen("toto.dk", "rb");
     if (arch == NULL)
     {
@@ -9040,7 +9622,7 @@ void REP()
 
     fclose(arch);
     printf("Muestra Terminada... \n");
-    printf("Procesamiento Terminado\n");
+    printf("Procesamiento Terminado\n");*/
 }
 
 void EXEC(char *x)
@@ -9303,7 +9885,32 @@ void EXEC(char *x)
                         {
                             printf("EJECUTANDO: Comando rep \n");
                             printf("Analizando..... \n");
-                            REP();
+                            while (opcion != NULL)
+                            {
+                                if (strcmp(opcion, "rep") == 0)
+                                {
+                                    printf("Analizando..... \n");
+                                    opcion = strtok(NULL, " ");
+                                }
+                                else
+                                {
+                                    // printf(" %s\n", opcion); // printing each token
+                                    //  MKDISK(opcion);
+                                    //   split = strtok(NULL, " ");
+                                    mknum[cont] = opcion;
+                                    // MKDISK(split);
+                                    printf(" %s\n", mknum[cont]);
+
+                                    cont = cont + 1;
+                                    opcion = strtok(NULL, " ");
+                                }
+                            }
+                            REP(mknum[0], mknum[1], mknum[2], mknum[3]);
+                            cont = 0;
+                            mknum[0] = NULL;
+                            mknum[1] = NULL;
+                            mknum[2] = NULL;
+                            mknum[3] = NULL;
                         }
                         else if (strcmp(opcion, "mkfs") == 0)
                         {
@@ -9738,7 +10345,7 @@ void EXEC(char *x)
                             mknum[0] = NULL;
                             mknum[1] = NULL;
                         }
-                        else if (strcmp(split, "pause") == 0)
+                        else if (strcmp(opcion, "pause") == 0)
                         {
                             printf("PRESIONE ENTER PARA CONTINUAR\n");
                             fgets(xx, 200, stdin);
@@ -9877,7 +10484,31 @@ int main()
         {
             printf("EJECUTANDO: Comando rep \n");
             printf("Analizando..... \n");
-            REP();
+            while (split != NULL)
+            {
+                if (strcmp(split, "rep") == 0)
+                {
+                    printf("Analizando..... \n");
+                    split = strtok(NULL, " ");
+                }
+                else
+                {
+                    // printf(" %s\n", split); // printing each token
+
+                    mknum[cont] = split;
+                    // MKDISK(split);
+                    printf(" %s\n", mknum[cont]);
+
+                    cont = cont + 1;
+                    split = strtok(NULL, " ");
+                }
+            }
+            REP(mknum[0], mknum[1], mknum[2], mknum[3]);
+            cont = 0;
+            mknum[0] = NULL;
+            mknum[1] = NULL;
+            mknum[2] = NULL;
+            mknum[3] = NULL;
         }
         else if (strcmp(split, "exec") == 0)
         {
